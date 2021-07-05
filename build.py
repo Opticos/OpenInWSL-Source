@@ -7,7 +7,7 @@ from distutils.dir_util import copy_tree
 
 program_name = "oiw"
 main = "main.py"
-version = "alpha89"
+version = "alpha9"
 icon = "assets/icon_centered.ico"
 folders = ["assets", "ttkbootstrap"]
 

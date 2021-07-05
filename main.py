@@ -1,8 +1,10 @@
 # My New Project... It *is* WSL related. Lets see what happens :)
 
+# Dedicated to the unborn. 
+
 # Copyright Paul-E / Opticos Studios 2021-♾
 #print("GO PYTHON!!!")
-version = "Alpha0.89"
+version = "Alpha0.9"
 lc_name = "Licenses1.txt"
 import time
 
@@ -577,7 +579,7 @@ def home():
     boxRoot.minsize(WIDTH, HEIGHT)
     boxRoot.running = True
     boxRoot.protocol("WM_DELETE_WINDOW", quitter)
-    boxRoot.geometry('%dx%d+%d+%d' % (WIDTH, HEIGHT, screensize[0] / 2 - WIDTH / 2, screensize[1] / 2 - HEIGHT / 2 - ui.inch2pix(0.5)))
+    boxRoot.geometry('+%d+%d' % (screensize[0] / 2 - WIDTH / 2, screensize[1] / 2 - HEIGHT / 2 - ui.inch2pix(0.5)))
     #boxRoot.configure(background='white')
     boxRoot.iconphoto(False, tk.PhotoImage(file=asset_dir + "icon3.png"))
 
@@ -759,10 +761,13 @@ def home():
                 w32 = "_w32"
             if contexter.get() == 1:
                 print("Enabling")
-                print(subprocess.getoutput(f"regedit /s {app_path}/context_enable{w32}.reg"))
+                #print(subprocess.getoutput(f"regedit /s {app_path}/context_enable{w32}.reg"))
+                print(subprocess.getoutput(f"reg import {app_path}/context_enable{w32}.reg"))
             else:
                 print("Disabling")
-                print(subprocess.getoutput(f"regedit /s {app_path}/context_disable{w32}.reg"))
+                #print(subprocess.getoutput(f"regedit /s {app_path}/context_disable{w32}.reg"))
+                print(subprocess.getoutput(f"reg import {app_path}/context_disable{w32}.reg"))
+                
         except:
             logger.exception("cannot toggle context option")
 
@@ -846,6 +851,7 @@ def home():
     #boxRoot.wm_attributes("-topmost", 1)
     #boxRoot.mainloop()
 
+    boxRoot.minsize(boxRoot.winfo_width(), boxRoot.winfo_height())
     while True:
         # draw(canvas, mouse=False)
         boxRoot.update()
@@ -894,7 +900,7 @@ def create(extension, test_file=False, comd=None, machine=None):
     boxRoot.minsize(WIDTH, HEIGHT)
     boxRoot.running = True
     boxRoot.protocol("WM_DELETE_WINDOW", quitter)
-    boxRoot.geometry('%dx%d+%d+%d' % (WIDTH, HEIGHT, screensize[0] / 2 - WIDTH / 2, screensize[1] / 2 - HEIGHT / 2 - ui.inch2pix(0.5)))
+    boxRoot.geometry('+%d+%d' % (screensize[0] / 2 - WIDTH / 2, screensize[1] / 2 - HEIGHT / 2 - ui.inch2pix(0.5)))
     #boxRoot.configure(background='white')
     boxRoot.iconphoto(False, tk.PhotoImage(file=asset_dir + "icon3.png"))
 
@@ -1191,10 +1197,10 @@ def applist(machine):
     boxRoot.iconname("Dialog")
     WIDTH, HEIGHT = ui.inch2pix(5), ui.inch2pix(6)
     boxRoot.minsize(WIDTH, HEIGHT)
-    boxRoot.resizable(False, False)
+    #boxRoot.resizable(False, False)
     boxRoot.running = True
     boxRoot.protocol("WM_DELETE_WINDOW", quitter)
-    boxRoot.geometry('%dx%d+%d+%d' % (WIDTH, HEIGHT, screensize[0] / 2 - WIDTH / 2, screensize[1] / 2 - HEIGHT / 2 - ui.inch2pix(0.5)))
+    boxRoot.geometry('+%d+%d' % (screensize[0] / 2 - WIDTH / 2, screensize[1] / 2 - HEIGHT / 2 - ui.inch2pix(0.5)))
     #boxRoot.configure(background='white')
     boxRoot.iconphoto(False, tk.PhotoImage(file=asset_dir + "icon3.png"))
 
@@ -1345,6 +1351,8 @@ def applist(machine):
             break
     return selected
 
+
+
 def manage_assoc(parent=None):
     ui.set_icons(asset_dir + "Paper/")
     #k = get_light()
@@ -1458,7 +1466,7 @@ def manage_assoc(parent=None):
     #boxRoot.resizable(False, False)
     boxRoot.running = True
     boxRoot.protocol("WM_DELETE_WINDOW", quitter)
-    boxRoot.geometry('%dx%d+%d+%d' % (WIDTH, HEIGHT, screensize[0] / 2 - WIDTH / 2, screensize[1] / 2 - HEIGHT / 2 - ui.inch2pix(0.5)))
+    boxRoot.geometry('+%d+%d' % (screensize[0] / 2 - WIDTH / 2, screensize[1] / 2 - HEIGHT / 2 - ui.inch2pix(0.5)))
     #boxRoot.configure(background='white')
     boxRoot.iconphoto(False, tk.PhotoImage(file=asset_dir + "icon3.png"))
 
@@ -1876,20 +1884,8 @@ def splash(extension, app, distro, icon=False):
         if time.time() - start_time > wait and icon2 == 1:
             animator.animate("start", [0, 0])
 
-#splash(".txt", "link", "Edit Association")
 
-#splash("", "preferences", "Dashboard", icon=True)
 
-#create(".txt", test_file="test.txt")
-
-#home()
-
-#manage_assoc()
-
-#print(applist("Ubuntu-20.04"))
-
-#splash(".png", "eog", "ubuntu")
-#import shlex
 args = sys.argv# + [r'''C:/users/pef/downloads/“We regard God as an airman regards his parachute; it's there for emergencies bu he hopes he'll never have to use it.”.png''']#[r"C:\Users\PEF\Desktop\GWSL-Source\assets\x11-icon.png"]
 
 if __name__ == "__main__":
