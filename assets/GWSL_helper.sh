@@ -3,7 +3,6 @@
 
 cd ~
 
-
 i="$1"
 
 #BASH EXPORTS
