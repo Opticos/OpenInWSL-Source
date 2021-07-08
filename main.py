@@ -4,7 +4,7 @@
 
 # Copyright Paul-E / Opticos Studios 2021-♾
 #print("GO PYTHON!!!")
-version = "Alpha0.9"
+version = "beta 1"
 lc_name = "Licenses1.txt"
 import time
 
@@ -24,6 +24,8 @@ import threading
 import webbrowser
 # So this is like a strange descendant of GWSL. Lots of common code.
 
+default_icon = "oiwcenteredsmall.png"#"icon3.png"
+default_ico = "icon_centered.ico"
 program_name = "OpenInWSL"
 
 #args = sys.argv + ["--r"] + [r"C:\Users\PEF\AppData\Roaming\OpenInWSL\settings.json"]#[r"C:\Users\PEF\Desktop\GWSL-Source\assets\x11-icon.png"]
@@ -396,51 +398,42 @@ def spawn_n_run(machine, command):
     ver = get_version(machine)
     sett = iset.read()
     backend = sett["backend"]
-    """
-    v = ""
-
-    if dbus == "True":
-        v = start_dbus(machine)
-    if dbus == "True" and "system message bus already started" not in v:
-        if passw == "":
-            code = pymsgbox.password(text="Enter Sudo Password To Start DBus:", title='DBus Not Started.', mask='*')
-
-            runo3(machine, "echo '" + code + "' | sudo -H -S " + "/etc/init.d/dbus start", nolog=True)
-        else:
-            runo3(machine, passw + "/etc/init.d/dbus start", nolog=True)
-    """
-    #if theme == "Follow Windows":
-    #k = get_light()
-    #prof = tools.profile(machine)
-    """
-    if "GTK_THEME" in prof:
-        if k == 1:
-            l_mode = "GTK_THEME=$GTK_THEME:light "
-        else:
-            l_mode = "GTK_THEME=$GTK_THEME:dark "
-    else:
-        if k == 1:
-            l_mode = "GTK_THEME=Adwaita:light "
-        else:
-            l_mode = "GTK_THEME=Adwaita:dark "
-    """
     command = command.strip()
     l_mode = ""
 
     def start_gwsl():
-        pass
+        cancel = False
+        try:
+            #print("checking for store version")
+            proc = subprocess.getoutput("gwsl.exe --r --startup")
+            if "not recognized" in proc:
+                raise FileNotFoundError
+
+        except:
+            #print("No Store Version")
+            if os.path.exists(os.getenv('APPDATA') + "\\GWSL\\gwsl.exe"):
+                #print("Traditional Version Installed")
+                try:
+                    subprocess.Popen(os.getenv('APPDATA') + "\\GWSL\\gwsl.exe --r --startup", shell=True)
+                except:
+                    logger.exception("Cannot start traditional GWSL")
+            else:
+                #print("No gwsl found")
+                logger.info("No GWSL installed. Install or get another xserver")
+                cancel = True
+                
     try:
         gtk = ""
         qt = ""
         append = ""
         if backend == "x" or backend == "gwsl":
             #print("USING XSERVER")
-            pass
-            """
             if backend == "gwsl":
+                #print("gwsl integration enabled")
                 #print("For GWSL Integration. Make sure GWSL is running by doing a silent start?")
                 
                 gwsl_running = False#chk_process.get_running("GWSL_service.exe")
+                """
                 for p in psutil.process_iter(attrs=["name"]):
                     #print(p)
                     # if p.status() == "running":
@@ -452,52 +445,47 @@ def spawn_n_run(machine, command):
                             break
                     except:
                         continue
-                
+                """
+                def windowEnumerationHandler(hwnd, top_windows):
+                    nonlocal gwsl_running
+                    if "SysTrayIconPy" in win32gui.GetWindowText(hwnd):
+                        gwsl_running = True
+
+                top_windows = []
+                win32gui.EnumWindows(windowEnumerationHandler, top_windows)
+               
 
                 if gwsl_running == False:
                     print("Starting GWSL in silent")
-                    cancel = False
-                    try:
-                        #print("checking for store version")
-                        proc = subprocess.getoutput("gwsl.exe --r --startup")
-                        if "not recognized" in proc:
-                            raise FileNotFoundError
+                    gw = threading.Thread(target=start_gwsl)
+                    gw.daemon=False
+                    gw.start()
 
-                    except:
-                        #print("No Store Version")
-                        if os.path.exists(os.getenv('APPDATA') + "\\GWSL\\gwsl.exe"):
-                            #print("Traditional Version Installed")
+                    #if cancel == False:
+                    test = 0
+                    started = False
+                    #print("finding")
+                    while started == False:
+                        for p in psutil.process_iter(["name"]):
                             try:
-                                subprocess.Popen(os.getenv('APPDATA') + "\\GWSL\\gwsl.exe --r --startup", shell=True)
-                            except:
-                                logger.exception("Cannot start traditional GWSL")
-                        else:
-                            #print("No gwsl found")
-                            logger.info("No GWSL installed. Install or get another xserver")
-                            cancel = True
-
-                    if cancel == False:
-                        test = 0
-                        started = False
-                        while started == False:
-                            for p in psutil.process_iter(["name"]):
-                                try:
-                                    name = p.info['name'].lower()
-                                    if "gwsl_vcxsrv" in name:
-                                        started = True
-                                        break
-                                except:
-                                    continue
-
-                            if started == False:
-                                time.sleep(1)
-                                test += 1
-                                if test > 6:
+                                name = p.info['name'].lower()
+                                if "gwsl_vcxsrv" in name:
+                                    started = True
+                                    print("found")
                                     break
-
+                            except:
+                                continue
+                        if started == False:
+                            time.sleep(0.4)
+                            test += 1
+                            if test > 10:
+                                break
+            #print("run")
             #fast = time.perf_counter() - start_time
             #print(2, fast)
-            """
+            else:
+                #print("basic x")
+                logger.info("Hey, I see you are not using GWSL but are using some other xserver. You should get GWSL :-)")
             if ver == 1:
                 # print("check1")
                 runs(machine, "DISPLAY=:0 PULSE_SERVER=tcp:localhost " + command,
@@ -533,6 +521,12 @@ def path_converter(path):
 
 
 #home()
+
+
+
+
+
+    
 
 
 
@@ -581,8 +575,8 @@ def home():
     boxRoot.protocol("WM_DELETE_WINDOW", quitter)
     boxRoot.geometry('+%d+%d' % (screensize[0] / 2 - WIDTH / 2, screensize[1] / 2 - HEIGHT / 2 - ui.inch2pix(0.5)))
     #boxRoot.configure(background='white')
-    boxRoot.iconphoto(False, tk.PhotoImage(file=asset_dir + "icon3.png"))
-
+    #boxRoot.iconphoto(False, tk.PhotoImage(file=asset_dir + default_icon))
+    boxRoot.iconbitmap(asset_dir + default_ico)
     # First the label
     frame_0 = ttk.Frame(boxRoot)
     frame_01 = ttk.Frame(frame_0)
@@ -625,14 +619,14 @@ def home():
     x_lab = ttk.Label(gui_frame, text="Graphical Backend: ")
     x_lab.grid(column=0, row=0, pady=10, sticky="w")
 
-    gwsl_radio = ttk.Radiobutton(gui_frame, text="GWSL/X", value='gwsl', variable=backend, command=set_back)#, style=style)
+    gwsl_radio = ttk.Radiobutton(gui_frame, text="GWSL", value='gwsl', variable=backend, command=set_back)#, style=style)
     gwsl_radio.grid(row=0, column=1, sticky="w", ipadx=5)
 
     wslg_radio = ttk.Radiobutton(gui_frame, text="wslg", value='wslg', variable=backend, command=set_back)
     wslg_radio.grid(row=0, column=2, sticky="w", ipadx=5)
 
-    #xserver_radio = ttk.Radiobutton(gui_frame, text="Other XServer", value='x', variable=backend, command=set_back)
-    #xserver_radio.grid(row=0, column=3, sticky="w", ipadx=5)
+    xserver_radio = ttk.Radiobutton(gui_frame, text="Other XServer", value='x', variable=backend, command=set_back)
+    xserver_radio.grid(row=0, column=3, sticky="w", ipadx=5)
 
     gui_frame.grid(row=1, sticky="w", padx=0)
 
@@ -681,10 +675,6 @@ def home():
         iset.set(sett)
         color = darkmode.get()
         tk.messagebox.showinfo(master=boxRoot, title="Theme Changed", message="Restart Open In WSL to apply changes")
-        #choice = pymsgbox.confirm(text=f"Please restart Open In WSL to apply theme changes",
-        #                          title="Theme Changed",
-        #                          buttons=["Ok"])
-
 
 
 
@@ -707,7 +697,7 @@ def home():
         manage_assoc(parent=boxRoot)
 
     manage_button = ttk.Button(frame_1, text="Manage File Associations", style="secondary.TButton", command=manage)
-    manage_button.grid(row=5, padx=0, pady=10, ipadx=5, sticky="w")
+    manage_button.grid(row=6, padx=0, pady=10, ipadx=5, sticky="w")
 
     ########
     frame_22 = ttk.Frame(frame_1)
@@ -750,7 +740,7 @@ def home():
     frame_22.columnconfigure(1, weight=1)
     frame_22.columnconfigure(2, weight=1)
 
-    frame_22.grid(row=6, sticky="EW", columnspan=3, pady=10)
+    frame_22.grid(row=7, sticky="EW", columnspan=3, pady=10)
 
     frame_1.columnconfigure(0, weight=1)
 
@@ -790,6 +780,25 @@ def home():
     cont_button = ttk.Checkbutton(frame_1, text='Show "Open In WSL" in Explorer Context Menu',  command=context, variable=contexter)
     cont_button.grid(row=4, padx=0, pady=10, ipadx=5, sticky="w")
 
+    """
+    autolaunch = tk.IntVar()
+    sett = iset.read()
+    if sett["start_gwsl"] == True:
+        ent = 1
+    else:
+        ent = 0
+
+    def launch_gwsl():
+        sett = iset.read()
+        sett["start_gwsl"] = autolaunch.get() == 1
+        iset.set(sett)
+
+    autolaunch.set(ent)
+
+
+    cont_button = ttk.Checkbutton(frame_1, text='Auto-Launch GWSL (Sometimes Slower)',  command=launch_gwsl, variable=autolaunch)
+    cont_button.grid(row=5, padx=0, pady=10, ipadx=5, sticky="w")
+    """
     #frame_1.columnconfigure(1, weight=1)
     frame_1.grid(row=1, column=0, padx=30, pady=10, sticky="NEW")  # , columnspan=3)
 
@@ -902,8 +911,8 @@ def create(extension, test_file=False, comd=None, machine=None):
     boxRoot.protocol("WM_DELETE_WINDOW", quitter)
     boxRoot.geometry('+%d+%d' % (screensize[0] / 2 - WIDTH / 2, screensize[1] / 2 - HEIGHT / 2 - ui.inch2pix(0.5)))
     #boxRoot.configure(background='white')
-    boxRoot.iconphoto(False, tk.PhotoImage(file=asset_dir + "icon3.png"))
-
+    #boxRoot.iconphoto(False, tk.PhotoImage(file=asset_dir + default_icon))
+    boxRoot.iconbitmap(asset_dir + default_ico)
     # First the label
     """
     explain = tk.Label(boxRoot, text=f"You have chosen OpenInWSL to open a {extension} file. \n\nHow do you want to handle this file type?")
@@ -1202,8 +1211,9 @@ def applist(machine):
     boxRoot.protocol("WM_DELETE_WINDOW", quitter)
     boxRoot.geometry('+%d+%d' % (screensize[0] / 2 - WIDTH / 2, screensize[1] / 2 - HEIGHT / 2 - ui.inch2pix(0.5)))
     #boxRoot.configure(background='white')
-    boxRoot.iconphoto(False, tk.PhotoImage(file=asset_dir + "icon3.png"))
-
+    #boxRoot.iconphoto(False, tk.PhotoImage(file=asset_dir + default_icon))
+    boxRoot.iconbitmap(asset_dir + default_ico)
+    
     app_loader = threading.Thread(target=get_apps)
     app_loader.daemon = True
     app_loader.start()
@@ -1468,8 +1478,8 @@ def manage_assoc(parent=None):
     boxRoot.protocol("WM_DELETE_WINDOW", quitter)
     boxRoot.geometry('+%d+%d' % (screensize[0] / 2 - WIDTH / 2, screensize[1] / 2 - HEIGHT / 2 - ui.inch2pix(0.5)))
     #boxRoot.configure(background='white')
-    boxRoot.iconphoto(False, tk.PhotoImage(file=asset_dir + "icon3.png"))
-
+    #boxRoot.iconphoto(False, tk.PhotoImage(file=asset_dir + default_icon))
+    boxRoot.iconbitmap(asset_dir + default_ico)
 
     # First the label
     frame_0 = ttk.Frame(boxRoot)
@@ -1701,7 +1711,7 @@ def splash(extension, app, distro, icon=False):
     ui.set_size([WIDTH, HEIGHT])
     pygame.display.set_caption("OpenInWSL")
     ui.start_graphics(pygame, asset_dir)
-    ico = pygame.image.load(asset_dir + "icon3.png").convert_alpha()
+    ico = pygame.image.load(asset_dir + default_icon).convert_alpha()
     pygame.display.set_icon(ico)
     fpsClock = pygame.time.Clock()
     FPS = 60
@@ -1886,7 +1896,7 @@ def splash(extension, app, distro, icon=False):
 
 
 
-args = sys.argv# + [r'''C:/users/pef/downloads/“We regard God as an airman regards his parachute; it's there for emergencies bu he hopes he'll never have to use it.”.png''']#[r"C:\Users\PEF\Desktop\GWSL-Source\assets\x11-icon.png"]
+args = sys.argv# + [r'''C:\Users\Paul-Work\Desktop\Open In WSL\Source\OpenInWSL-Source\assets\GWSL_helper.sh''']#[r"C:\Users\PEF\Desktop\GWSL-Source\assets\x11-icon.png"]
 
 if __name__ == "__main__":
     #logger.info(str(args))
