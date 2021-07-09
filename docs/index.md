@@ -3,9 +3,6 @@ layout: homepage
 title: OpenInWSL
 ---
 
-
-<img src="./tutorials/banner.png">
-
 ## OpenInWSL
 
 ### Site Under Construction. See the video to get the idea:
