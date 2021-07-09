@@ -13,7 +13,7 @@ Here is another video showing it in action:
 
 ## OpenInWSL Is Currently in Beta Testing.
 
-Current Testing Version: 1.2 [Download Here]("https://github.com/Pololot64/OpenInWSL/releases/download/v1.2beta/OpenInWSL.Traditional.beta.1-2.release.x64.exe")
+Current Testing Version: 1.2 [Download Here](https://github.com/Pololot64/OpenInWSL/releases/download/v1.2beta/OpenInWSL.Traditional.beta.1-2.release.x64.exe)
 
 ### Beta Feedback:
 
