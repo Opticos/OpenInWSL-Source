@@ -4,7 +4,7 @@ title: OpenInWSL
 ---
 
 
-<img src="https://opticos.github.io/gwsl/tutorials/banner.png">
+<img src="./tutorials/banner.png">
 
 ## GWSL
 
