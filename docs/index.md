@@ -80,12 +80,12 @@ If you enjoy OpenInWSL, please consider buying me a cup of coffee. I worked hard
 </form>
 
 ##### Or use Ko-Fi ☕
-<script type='text/javascript' src='https://ko-fi.com/widgets/widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Support Me on Ko-fi', '#e08a28', 'G2G24743G');kofiwidget2.draw();</script> 
+<script type='text/javascript' src='https://ko-fi.com/widgets/widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Support Me on Ko-fi', '#00C3F5', 'G2G24743G');kofiwidget2.draw();</script> 
 
 (Ko-Fi is the floating button on the left side.)
 
 ##### Or BuyMeACoffee.com ⭐
-<script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="optico5" data-color="#005BDD" data-emoji=""  data-font="Poppins" data-text="Donate: Buy me a coffee.com" data-outline-color="#000000" data-font-color="#ffffff" data-coffee-color="#00C3F5" ></script>
+<script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="optico5" data-color="#00C3F5" data-emoji=""  data-font="Poppins" data-text="Donate: Buy me a coffee.com" data-outline-color="#000000" data-font-color="#ffffff" data-coffee-color="#005BDD" ></script>
 
 (BuyMeACoffee is the floating button on the right side.)
 
@@ -94,7 +94,7 @@ If you enjoy OpenInWSL, please consider buying me a cup of coffee. I worked hard
   kofiWidgetOverlay.draw('optico5', {
     'type': 'floating-chat',
     'floating-chat.donateButton.text': 'Donate: Ko-Fi',
-    'floating-chat.donateButton.background-color': '#f45d22',
+    'floating-chat.donateButton.background-color': '#00C3F5',
     'floating-chat.donateButton.text-color': '#fff'
   });
 </script>
