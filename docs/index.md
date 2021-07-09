@@ -4,7 +4,7 @@ title: OpenInWSL
 ---
 
 
-<img src="./tutorials/banner.png">
+<img src="./tutorials/oiwcentered.png">
 
 ## GWSL
 
