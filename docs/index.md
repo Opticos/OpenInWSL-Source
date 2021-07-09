@@ -19,7 +19,7 @@ Current Testing Version: 1.2 [Download Here]("https://github.com/Pololot64/OpenI
 
 There are several ways you can give feedback. Please Do!
 
-Visit Our Discord Server (Much faster):
+Visit Our Discord Server (Fast responses):
 
 [![Discord Banner 3](https://discord.com/api/guilds/618185330289541130/widget.png?style=banner3)](https://discord.gg/VkvNgkH)
 
