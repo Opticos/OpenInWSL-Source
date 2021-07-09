@@ -1,0 +1,5 @@
+theme: jekyll-theme-cayman
+show_downloads: ["false"]
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
