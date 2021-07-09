@@ -1,6 +1,6 @@
 ---
 layout: homepage
-title: GWSL
+title: OpenInWSL
 ---
 
 
