@@ -56,7 +56,7 @@ Quick Links:
 
 
 ### Frequently Asked Questions ###
-*  Does OpenInWSL work on Windows 10 versions older than 2004? *Yes, now that Microsoft has made WSL2 compatible with older versions of Windows 10, GWSL can run on them too. To run GWSL on older versions of Windows 10, you will need to install WSL2.*
+*  Does OpenInWSL work on Windows 10 versions older than 2004? *Yes, now that Microsoft has made WSL2 compatible with older versions of Windows 10, OpenInWSL can run on them too. To run OpenInWSL on older versions of Windows 10, you will need to install WSL2.*
 *  Why aren't there more questions? *We are woking on this... Not many questions have been asked frequently enough to put here. Start asking!*
 
 
@@ -85,7 +85,7 @@ If you enjoy OpenInWSL, please consider buying me a cup of coffee. I worked hard
 (Ko-Fi is the floating button on the left side.)
 
 ##### Or BuyMeACoffee.com ⭐
-<script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="optico5" data-color="#e08a28" data-emoji=""  data-font="Poppins" data-text="Donate: Buy me a coffee.com" data-outline-color="#000000" data-font-color="#ffffff" data-coffee-color="#FF7673" ></script>
+<script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="optico5" data-color="#005BDD" data-emoji=""  data-font="Poppins" data-text="Donate: Buy me a coffee.com" data-outline-color="#000000" data-font-color="#ffffff" data-coffee-color="#00C3F5" ></script>
 
 (BuyMeACoffee is the floating button on the right side.)
 
@@ -100,7 +100,7 @@ If you enjoy OpenInWSL, please consider buying me a cup of coffee. I worked hard
 </script>
 
 
-<script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="optico5" data-description="Support me on Buy me a coffee!" data-message="Donate on BuyMeACoffee.com" data-color="#FF813F" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
+<script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="optico5" data-description="Support me on Buy me a coffee!" data-message="Donate on BuyMeACoffee.com" data-color="#00C3F5" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
 
 ### My Other Sites:
 <!--*  [LinkedIn Profile](https://www.linkedin.com/in/paul-elliot-foy)-->
