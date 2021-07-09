@@ -14,13 +14,34 @@ title: OpenInWSL
 Here is another video showing it in action:
 <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/S6GXBEQ5KzA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
+## OpenInWSL Is Currently in Beta Testing.
+
+Current Testing Version: 1.2 [Download Here]("https://github.com/Pololot64/OpenInWSL/releases/download/v1.2beta/OpenInWSL.Traditional.beta.1-2.release.x64.exe")
+
+### Beta Feedback:
+
+There are several ways you can give feedback. Please Do!
+
+Visit Our Discord Server (Much faster):
+
+[![Discord Banner 3](https://discord.com/api/guilds/618185330289541130/widget.png?style=banner3)](https://discord.gg/VkvNgkH)
+
+[GitHub Issues Page](https://github.com/Pololot64/OpenInWSL/issues) (Note this repo and page will move to Opticos/OpenInWSL when testing is complete)
+
+Contact us by email:
+
+opticosstudios (at) gmail (dot) com
+
+
+
+
 ### Minimum System Requirements
 
 Windows 10 Version 2004 [(See FAQ)](#frequently-asked-questions)
 
 WSL (with the WSL2 update)
 
-[GWSL]("opticos.github.io/gwsl") (Recommended) or another Xserver (or the wslg preview)
+[GWSL]("https://opticos.github.io/gwsl") (Recommended) or another Xserver (or the wslg preview)
 
 
 
