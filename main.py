@@ -4,7 +4,7 @@
 
 # Copyright Paul-E / Opticos Studios 2021-♾
 #print("GO PYTHON!!!")
-version = "beta 1"
+version = "beta 1-3"
 lc_name = "Licenses1.txt"
 import time
 
@@ -1653,6 +1653,7 @@ def splash(extension, app, distro, icon=False):
 
 
     WIDTH, HEIGHT = ui.inch2pix(2.5), ui.inch2pix(0.8)  ##ui.inch2pix(7.9), ui.inch2pix(5)
+
     if donate == True:
         HEIGHT = ui.inch2pix(1.6)
     monitor_info = GetMonitorInfo(MonitorFromPoint((0, 0)))
@@ -1705,7 +1706,7 @@ def splash(extension, app, distro, icon=False):
 
     white, light = get_system_light()
 
-
+    pygame.display.init()
     canvas = pygame.Surface([WIDTH, HEIGHT], pygame.SRCALPHA)
 
     ui.set_size([WIDTH, HEIGHT])
@@ -1791,7 +1792,7 @@ def splash(extension, app, distro, icon=False):
         icon2 = animator.get("icon2")[0] / 100
         if start == 0:
             #pygame.quit()
-            break
+            pygame.display.quit()
             #sys.exit()
         if start < 1:
             win32gui.MoveWindow(HWND, winpos, winh - HEIGHT + int(start * HEIGHT), WIDTH, HEIGHT, 1)
@@ -1840,7 +1841,11 @@ def splash(extension, app, distro, icon=False):
         else:
             ext_font = ui.font(ico_font, int(ui.inch2pix(0.3)))
             offset = ui.inch2pix(0.03)
-        txt = ext_font.render(extension, True, white)
+        #extension = ".gitigno"#ore"
+        ext = extension
+        if len(extension) > 7:
+            ext = extension[:7] + "..."
+        txt = ext_font.render(ext, True, white)
         txt.set_alpha(int(icon1 * 255))
         canvas.blit(txt, [WIDTH / 4 - txt.get_width() / 2,
                           offset + HEIGHT - txt.get_height() - ui.inch2pix(0.24) - int(ui.inch2pix(0.2) * (1 - icon1))])
@@ -1896,7 +1901,7 @@ def splash(extension, app, distro, icon=False):
 
 
 
-args = sys.argv# + [r'''C:\Users\Paul-Work\Desktop\Open In WSL\Source\OpenInWSL-Source\assets\GWSL_helper.sh''']#[r"C:\Users\PEF\Desktop\GWSL-Source\assets\x11-icon.png"]
+args = sys.argv# + [r'''C:\Users\PEF\Desktop\GWSL-Source\.gitignore''']#[r"C:\Users\PEF\Desktop\GWSL-Source\assets\x11-icon.png"]
 
 if __name__ == "__main__":
     #logger.info(str(args))
@@ -1905,8 +1910,13 @@ if __name__ == "__main__":
         handler_mode = True
     if handler_mode:
         file = " ".join(args[1:])
-        #print("F", file)
+        print("F", file, os.path.basename(file))
         extension = os.path.splitext(file)[1].lower().strip()
+        if extension == "":
+            base = os.path.basename(file)
+            if len(base) != 0 and base.startswith("."):
+                extension = base
+
         handlers = iset.read()["assocs"]
         import shlex
         if extension in handlers:
