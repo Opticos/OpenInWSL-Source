@@ -4,7 +4,7 @@
 
 # Copyright Paul-E / Opticos Studios 2021-♾
 #print("GO PYTHON!!!")
-version = "beta 1-3"
+version = "1.3"
 lc_name = "Licenses1.txt"
 import time
 
@@ -528,7 +528,9 @@ def path_converter(path):
 
     
 
-
+def open_help(context):
+    #print("helper", context)
+    webbrowser.open()
 
 
 def home():
@@ -828,7 +830,7 @@ def home():
 
 
     def helper():
-        print("help")
+        open_help("home")
     help = ttk.Button(frame_3, text="Help", command=helper)
     help.grid(row=0, column=4, sticky="wE", padx=5, ipadx=5)
 
@@ -1052,7 +1054,7 @@ def create(extension, test_file=False, comd=None, machine=None):
     cancel.grid(row=0, column=0, sticky="WE", padx=5, ipadx=5)
 
     def helper():
-        print("help")
+        open_help("create")
     help = ttk.Button(frame_3, text="Help", command=helper)
     help.grid(row=0, column=1, sticky="WE", padx=5, ipadx=5)
 
@@ -1299,7 +1301,7 @@ def applist(machine):
     cancel.grid(row=0, column=0, sticky="W", padx=5)
 
     def helper():
-        print("help")
+        open_help("applist")
     help = ttk.Button(frame_3, text="Help", command=helper)
     help.grid(row=0, column=1, sticky="E", padx=5)
 
@@ -1562,7 +1564,7 @@ def manage_assoc(parent=None):
     cancel.grid(row=0, column=0, sticky="W", padx=5)
 
     def helper():
-        print("help")
+        open_help("manage")
     help = ttk.Button(frame_3, text="Help", command=helper)
     help.grid(row=0, column=1, sticky="E", padx=5)
 
@@ -1901,7 +1903,7 @@ def splash(extension, app, distro, icon=False):
 
 
 
-args = sys.argv# + [r'''C:\Users\PEF\Desktop\GWSL-Source\.gitignore''']#[r"C:\Users\PEF\Desktop\GWSL-Source\assets\x11-icon.png"]
+args = sys.argv# + [r'''C:\Users\PEF\Desktop\GWSL-Source\DEVELOP.md''']#[r"C:\Users\PEF\Desktop\GWSL-Source\assets\x11-icon.png"]
 
 if __name__ == "__main__":
     #logger.info(str(args))
