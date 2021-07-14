@@ -3,9 +3,6 @@ layout: homepage
 title: OpenInWSL
 ---
 
-
-<img src="./tutorials/banner.png">
-
 ## OpenInWSL
 
 ### Site Under Construction. See the video to get the idea:
@@ -16,13 +13,13 @@ Here is another video showing it in action:
 
 ## OpenInWSL Is Currently in Beta Testing.
 
-Current Testing Version: 1.2 [Download Here]("https://github.com/Pololot64/OpenInWSL/releases/download/v1.2beta/OpenInWSL.Traditional.beta.1-2.release.x64.exe")
+Current Testing Version: 1.2 [Download Here](https://github.com/Pololot64/OpenInWSL/releases/download/v1.2beta/OpenInWSL.Traditional.beta.1-2.release.x64.exe)
 
 ### Beta Feedback:
 
 There are several ways you can give feedback. Please Do!
 
-Visit Our Discord Server (Much faster):
+Visit Our Discord Server (Fast responses):
 
 [![Discord Banner 3](https://discord.com/api/guilds/618185330289541130/widget.png?style=banner3)](https://discord.gg/VkvNgkH)
 
@@ -59,7 +56,7 @@ Quick Links:
 
 
 ### Frequently Asked Questions ###
-*  Does OpenInWSL work on Windows 10 versions older than 2004? *Yes, now that Microsoft has made WSL2 compatible with older versions of Windows 10, GWSL can run on them too. To run GWSL on older versions of Windows 10, you will need to install WSL2.*
+*  Does OpenInWSL work on Windows 10 versions older than 2004? *Yes, now that Microsoft has made WSL2 compatible with older versions of Windows 10, OpenInWSL can run on them too. To run OpenInWSL on older versions of Windows 10, you will need to install WSL2.*
 *  Why aren't there more questions? *We are woking on this... Not many questions have been asked frequently enough to put here. Start asking!*
 
 
@@ -83,12 +80,12 @@ If you enjoy OpenInWSL, please consider buying me a cup of coffee. I worked hard
 </form>
 
 ##### Or use Ko-Fi ☕
-<script type='text/javascript' src='https://ko-fi.com/widgets/widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Support Me on Ko-fi', '#e08a28', 'G2G24743G');kofiwidget2.draw();</script> 
+<script type='text/javascript' src='https://ko-fi.com/widgets/widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Support Me on Ko-fi', '#00C3F5', 'G2G24743G');kofiwidget2.draw();</script> 
 
 (Ko-Fi is the floating button on the left side.)
 
 ##### Or BuyMeACoffee.com ⭐
-<script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="optico5" data-color="#e08a28" data-emoji=""  data-font="Poppins" data-text="Donate: Buy me a coffee.com" data-outline-color="#000000" data-font-color="#ffffff" data-coffee-color="#FF7673" ></script>
+<script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="optico5" data-color="#00C3F5" data-emoji=""  data-font="Poppins" data-text="Donate: Buy me a coffee.com" data-outline-color="#000000" data-font-color="#ffffff" data-coffee-color="#005BDD" ></script>
 
 (BuyMeACoffee is the floating button on the right side.)
 
@@ -97,13 +94,13 @@ If you enjoy OpenInWSL, please consider buying me a cup of coffee. I worked hard
   kofiWidgetOverlay.draw('optico5', {
     'type': 'floating-chat',
     'floating-chat.donateButton.text': 'Donate: Ko-Fi',
-    'floating-chat.donateButton.background-color': '#f45d22',
+    'floating-chat.donateButton.background-color': '#00C3F5',
     'floating-chat.donateButton.text-color': '#fff'
   });
 </script>
 
 
-<script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="optico5" data-description="Support me on Buy me a coffee!" data-message="Donate on BuyMeACoffee.com" data-color="#FF813F" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
+<script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="optico5" data-description="Support me on Buy me a coffee!" data-message="Donate on BuyMeACoffee.com" data-color="#00C3F5" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
 
 ### My Other Sites:
 <!--*  [LinkedIn Profile](https://www.linkedin.com/in/paul-elliot-foy)-->
