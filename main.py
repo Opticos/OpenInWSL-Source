@@ -4,7 +4,7 @@
 
 # Copyright Paul-E / Opticos Studios 2021-♾
 #print("GO PYTHON!!!")
-version = "1.3"
+version = "1.3 store"
 lc_name = "Licenses1.txt"
 import time
 
@@ -30,7 +30,7 @@ program_name = "OpenInWSL"
 
 #args = sys.argv + ["--r"] + [r"C:\Users\PEF\AppData\Roaming\OpenInWSL\settings.json"]#[r"C:\Users\PEF\Desktop\GWSL-Source\assets\x11-icon.png"]
 
-BUILD_MODE = "WIN32"  # MSIX or WIN32
+BUILD_MODE = "MSIX"  # MSIX or WIN32
 
 debug = False
 
@@ -530,7 +530,7 @@ def path_converter(path):
 
 def open_help(context):
     #print("helper", context)
-    webbrowser.open()
+    webbrowser.open("https://opticos.github.io/openinwsl/help")
 
 
 def home():
@@ -805,7 +805,7 @@ def home():
     frame_1.grid(row=1, column=0, padx=30, pady=10, sticky="NEW")  # , columnspan=3)
 
     def donate():
-        webbrowser.open_new("https://opticos.github.io/gwsl/#donate")
+        webbrowser.open_new("https://opticos.github.io/openinwsl/#donate")
     donate = ttk.Button(boxRoot, text="Please Consider Donating!", style="success.TButton", command=donate)
     donate.grid(row=2, padx=30, pady=0, ipadx=5, ipady=5, sticky="wE")
 
@@ -1795,10 +1795,14 @@ def splash(extension, app, distro, icon=False):
         if start == 0:
             #pygame.quit()
             pygame.display.quit()
+            break
             #sys.exit()
         if start < 1:
-            win32gui.MoveWindow(HWND, winpos, winh - HEIGHT + int(start * HEIGHT), WIDTH, HEIGHT, 1)
-            win32gui.SetLayeredWindowAttributes(HWND, win32api.RGB(*fuchsia), int(start * 255), win32con.LWA_ALPHA)
+            try:
+                win32gui.MoveWindow(HWND, winpos, winh - HEIGHT + int(start * HEIGHT), WIDTH, HEIGHT, 1)
+                win32gui.SetLayeredWindowAttributes(HWND, win32api.RGB(*fuchsia), int(start * 255), win32con.LWA_ALPHA)
+            except:
+                pass
         else:
             win32gui.MoveWindow(HWND, winpos, winh, WIDTH, HEIGHT, 1)
             win32gui.SetLayeredWindowAttributes(HWND, win32api.RGB(*fuchsia), int(255), win32con.LWA_ALPHA)
@@ -1903,7 +1907,7 @@ def splash(extension, app, distro, icon=False):
 
 
 
-args = sys.argv# + [r'''C:\Users\PEF\Desktop\GWSL-Source\DEVELOP.md''']#[r"C:\Users\PEF\Desktop\GWSL-Source\assets\x11-icon.png"]
+args = sys.argv# + [r'''C:\Users\PEF\AppData\Roaming\OpenInWSL\settings.json''']#[r"C:\Users\PEF\Desktop\GWSL-Source\assets\x11-icon.png"]
 
 if __name__ == "__main__":
     #logger.info(str(args))
