@@ -1,6 +1,6 @@
 ## OpenInWSL-Source
 
-The source for OpenInWSL
+The sourcecode for OpenInWSL
 
 OpenInWSL lets you turn WSL Linux programs into Windows file handlers.
 
