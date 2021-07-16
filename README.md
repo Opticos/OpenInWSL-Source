@@ -1,4 +1,4 @@
-OpenInWSL-Source
+## OpenInWSL-Source
 
 The source for OpenInWSL
 
