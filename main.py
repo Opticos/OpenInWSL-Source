@@ -946,7 +946,6 @@ def create(extension, test_file=False, comd=None, machine=None):
     machines[:] = (value for value in machines if value != "")
 
 
-
     if len(machines) > 1:
         # animator.animate("start", [0, 0])
         machine_chooser = ttk.Combobox(frame_1, values=machines, state="readonly")
@@ -965,23 +964,12 @@ def create(extension, test_file=False, comd=None, machine=None):
     machine_chooser.grid(row=0, column=1, padx=0, pady=20, sticky="WE", rowspan=1, columnspan=2)
 
     if pre_machine != None:
-        machine_chooser.set(pre_machine)
-
-    #selector.bind('<<ComboboxSelected>>', month_changed)
-
-
-
-    #button = ttk.Button(frame_1, text="Do Something")
+        try:
+            machine_chooser.set(pre_machine)
+        except:
+            machine_chooser["text"] = pre_machine
 
 
-    #labelm.grid(row=0, padx=10, pady=10, sticky="EW", rowspan=2)
-    #button.grid(row=1, padx=10, pady=10, sticky="EW", rowspan=2)
-
-    #frame_1.columnconfigure(1, weight=1)
-    #frame_1.grid(row=1, column=0, padx=20, pady=10, sticky="NEW")#, columnspan=3)
-    #frame_1.grid_columnconfigure(2, weight=1)
-
-    #frame_2 = ttk.Frame(boxRoot)  # , padding="0.15i")
 
     cmd_label = ttk.Label(frame_1, text="Command:  ")
     cmd_label.grid(row=1, column=0, padx=10, pady=0, sticky="WE", rowspan=1)
@@ -994,12 +982,18 @@ def create(extension, test_file=False, comd=None, machine=None):
     cmd.grid(row=1, column=1, padx=0, pady=0, sticky="WE", rowspan=1)
 
     def app_choose():
-        app = applist(machine_chooser.get())
+        nonlocal machine
+        try:
+            mach = machine_chooser.get()
+        except:
+            mach = machine
+        app = applist(mach)
         if app != None:
             cmd.delete(0, 'end')
             cmd.insert(0, app[1]["cmd"])
 
     def saver():
+        nonlocal machine
         try:
             sett = iset.read()
             #print("b", cmd.get(), cmd.get().strip())
@@ -1012,7 +1006,11 @@ def create(extension, test_file=False, comd=None, machine=None):
                 if "#fpth#" not in cmd_s:
                     cmd_s += " #fpth#"
                 sett["assocs"][extension] = {"distro": None, "command": None}
-                sett["assocs"][extension]["distro"] = machine_chooser.get()
+                try:
+                    mach = machine_chooser.get()
+                except:
+                    mach = machine
+                sett["assocs"][extension]["distro"] = mach
                 sett["assocs"][extension]["command"] = cmd_s
                 iset.set(sett)
                 quitter()
@@ -1060,6 +1058,7 @@ def create(extension, test_file=False, comd=None, machine=None):
 
     column = 2
     def tester():
+        nonlocal machine
         try:
             cmd_s = cmd.get()
             if cmd_s.startswith(" ") or cmd_s.endswith(" "):
@@ -1073,7 +1072,11 @@ def create(extension, test_file=False, comd=None, machine=None):
             pather = path_converter(file)
             pather = shlex.quote(pather)
             command = str(cmd_s.replace("#fpth#", pather))
-            machine = machine_chooser.get()
+            try:
+                mach = machine_chooser.get()
+            except:
+                mach = machine
+            machine = mach
 
             #command = str(cmd_s.replace("#fpth#", "'" + path_converter(test_file) + "'"))
             logger.info("RUN TEST: " + str(command))
@@ -1907,7 +1910,7 @@ def splash(extension, app, distro, icon=False):
 
 
 
-args = sys.argv# + [r'''C:\Users\PEF\AppData\Roaming\OpenInWSL\settings.json''']#[r"C:\Users\PEF\Desktop\GWSL-Source\assets\x11-icon.png"]
+args = sys.argv# + [r'''wsl$\Ubuntu-20.04\home\opticos\.bashrc''']#[r"C:\Users\PEF\Desktop\GWSL-Source\assets\x11-icon.png"]
 
 if __name__ == "__main__":
     #logger.info(str(args))
