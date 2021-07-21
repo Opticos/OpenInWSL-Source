@@ -4,7 +4,7 @@
 
 # Copyright Paul-E / Opticos Studios 2021-♾
 #print("GO PYTHON!!!")
-version = "1.3 store"
+version = "1.4 store"
 lc_name = "Licenses1.txt"
 import time
 
