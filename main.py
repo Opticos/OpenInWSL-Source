@@ -4,7 +4,7 @@
 
 # Copyright Paul-E / Opticos Studios 2021-♾
 #print("GO PYTHON!!!")
-version = "1.4 store"
+version = "1.5 store"
 lc_name = "Licenses1.txt"
 import time
 
@@ -379,7 +379,7 @@ def get_version(machine):
             if 'NAME' not in b and b != [] and b != None:
                 machines2.append(b)
         if wsl_1 == True:
-            print("assuming wsl 1")
+            #print("assuming wsl 1")
             return 1
 
         for i in machines2:
@@ -711,15 +711,15 @@ def home():
         os.chdir(old_pat)
 
     def get_gwsl():
-        webbrowser.open("https://www.microsoft.com/store/apps/9nl6kd1h33v3?cid=storebadge&ocid=badge")
+        webbrowser.open("ms-windows-store://pdp/?productid=9nl6kd1h33v3")
     manage_button = ttk.Button(frame_22, text="Get GWSL XServer", style="primary.Link.TButton", command=get_gwsl)
-    manage_button.grid(row=0, padx=0, pady=5, ipadx=0, sticky="W", column=0)
+    manage_button.grid(row=0, padx=0, pady=5, ipadx=5, sticky="W", column=0)
 
     def optic_web():
         webbrowser.open("https://sites.google.com/bartimee.com/opticos-studios/home")
 
     manage_button = ttk.Button(frame_22, text="Opticos Website", style="primary.Link.TButton", command=optic_web)
-    manage_button.grid(row=0, padx=0, pady=5, ipadx=0, sticky="E", column=3)
+    manage_button.grid(row=0, padx=0, pady=5, ipadx=5, sticky="E", column=3)
 
     def logs():
         old_pat = os.getcwd()
@@ -818,7 +818,7 @@ def home():
     cancel.grid(row=0, column=0, sticky="We", padx=5, ipadx=5)
 
     manage_button = ttk.Button(frame_3, text="Configuration File", style="primary.Outline.TButton", command=config)
-    manage_button.grid(row=0, padx=5, pady=5, ipadx=0, sticky="we", column=1)
+    manage_button.grid(row=0, padx=5, pady=5, ipadx=5, sticky="we", column=1)
 
 
     manage_button = ttk.Button(frame_3, text="Licenses", style="primary.Outline.TButton", command=license)
@@ -861,8 +861,11 @@ def home():
     boxRoot.deiconify()
     #boxRoot.wm_attributes("-topmost", 1)
     #boxRoot.mainloop()
-
+    boxRoot.update()
     boxRoot.minsize(boxRoot.winfo_width(), boxRoot.winfo_height())
+    #boxRoot.geometry('+%d+%d' % (screensize[0] / 2 - boxRoot.winfo_width() / 2,
+    #                             screensize[1] / 2 - boxRoot.winfo_height() / 2 - ui.inch2pix(0.5)))
+    
     while True:
         # draw(canvas, mouse=False)
         boxRoot.update()
@@ -945,6 +948,7 @@ def create(extension, test_file=False, comd=None, machine=None):
     machines = re.sub(r'[^a-zA-Z0-9./\n-]', r'', machines).splitlines()
     machines[:] = (value for value in machines if value != "")
 
+    machines = ["test"]
 
     if len(machines) > 1:
         # animator.animate("start", [0, 0])
@@ -1572,7 +1576,7 @@ def manage_assoc(parent=None):
     help.grid(row=0, column=1, sticky="E", padx=5)
 
     test = ttk.Button(frame_3, text="Add Association", style="success.TButton", command=add_app)
-    test.grid(row=0, column=3, sticky="E", padx=5)
+    test.grid(row=0, column=3, sticky="E", padx=5, ipadx=5)
 
     #apply = ttk.Button(frame_3, text="Save Configuration", style="success.TButton")
     #apply.grid(row=0, column=3, sticky="E", padx=5)
@@ -1753,6 +1757,17 @@ def splash(extension, app, distro, icon=False):
         logger.exception("Exception occurred - Please reset settings")
         acrylic = True
 
+    import rounder
+
+    s = rounder.round(HWND)
+
+    if s == True:
+        pad = ui.inch2pix(0.14)
+        
+        fade = True#False
+    else:
+        pad = 0
+        fade = True
     if acrylic == True:
         import blur
 
@@ -1802,13 +1817,19 @@ def splash(extension, app, distro, icon=False):
             #sys.exit()
         if start < 1:
             try:
-                win32gui.MoveWindow(HWND, winpos, winh - HEIGHT + int(start * HEIGHT), WIDTH, HEIGHT, 1)
-                win32gui.SetLayeredWindowAttributes(HWND, win32api.RGB(*fuchsia), int(start * 255), win32con.LWA_ALPHA)
+                win32gui.MoveWindow(HWND, winpos, winh - HEIGHT + int(start * (HEIGHT + pad)), WIDTH, HEIGHT, 1)
+                if fade == True:
+                    win32gui.SetLayeredWindowAttributes(HWND, win32api.RGB(*fuchsia), int(start * 255), win32con.LWA_ALPHA)
+                else:
+                    win32gui.SetLayeredWindowAttributes(HWND, win32api.RGB(*fuchsia), int(255), win32con.LWA_ALPHA)
             except:
                 pass
         else:
-            win32gui.MoveWindow(HWND, winpos, winh, WIDTH, HEIGHT, 1)
-            win32gui.SetLayeredWindowAttributes(HWND, win32api.RGB(*fuchsia), int(255), win32con.LWA_ALPHA)
+            win32gui.MoveWindow(HWND, winpos, winh + pad, WIDTH, HEIGHT, 1)
+            if fade == True:
+                win32gui.SetLayeredWindowAttributes(HWND, win32api.RGB(*fuchsia), int(255), win32con.LWA_ALPHA)
+            else:
+                win32gui.SetLayeredWindowAttributes(HWND, win32api.RGB(*fuchsia), int(255), win32con.LWA_ALPHA)
             # animator.animate("icon1", [100, 0])
             # if icon1 == 1:
             animator.animate("arrows", [100, 0])
@@ -1822,14 +1843,13 @@ def splash(extension, app, distro, icon=False):
             #pygame.gfxdraw.line(canvas, padd, l_h, WIDTH - padd, l_h, [180, 180, 180, int(80 * launch)])
 
         else:
-            pygame.gfxdraw.box(canvas, [0, 0, WIDTH, HEIGHT], [255, 255, 255, 200])
-            #pygame.gfxdraw.box(canvas, [0, 0, WIDTH, HEIGHT], [0, 0, 0, 50])
+            pass
+            #pygame.gfxdraw.box(canvas, [0, 0, WIDTH, HEIGHT], [255, 255, 255, 200]) pre 11
+
+            pygame.gfxdraw.box(canvas, [0, 0, WIDTH, HEIGHT], [255, 255, 255, 180])
 
             pygame.gfxdraw.rectangle(canvas, [0, 0, WIDTH, HEIGHT], [255, 255, 255, 80])
-            #pygame.gfxdraw.rectangle(canvas, [0, 0, WIDTH, HEIGHT + 1], [0, 0, 0, 80])
-
-            #pygame.gfxdraw.line(canvas, padd, l_h, WIDTH - padd, l_h, [0, 0, 0, int(80 * launch)])
-
+           
         if acrylic == False:
             pygame.gfxdraw.box(canvas, [0, 0, WIDTH, HEIGHT], accent)
 
@@ -1857,14 +1877,14 @@ def splash(extension, app, distro, icon=False):
         txt = ext_font.render(ext, True, white)
         txt.set_alpha(int(icon1 * 255))
         canvas.blit(txt, [WIDTH / 4 - txt.get_width() / 2,
-                          offset + HEIGHT - txt.get_height() - ui.inch2pix(0.24) - int(ui.inch2pix(0.2) * (1 - icon1))])
+                          offset + HEIGHT - txt.get_height() - ui.inch2pix(0.29) - int(ui.inch2pix(0.2) * (1 - icon1))]) #used to be 24
 
         icon_font = ui.font(ico_font, int(ui.inch2pix(0.2)))
         arrow = icon_font.render("", True, white)
 
         offset = ui.inch2pix(0.0)
         arrow.set_alpha(int(arrows * 255))
-        h = 0.25
+        h = 0.29 #utb25
         canvas.blit(arrow, [
             WIDTH / 2 - arrow.get_width() / 2 - arrow.get_width() + offset - int(ui.inch2pix(0.6) * (1 - arrows)),
             HEIGHT - ui.inch2pix(h) - arrow.get_height()])  # - int(ui.inch2pix(0.2) * (1 - arrows))])
@@ -1879,6 +1899,8 @@ def splash(extension, app, distro, icon=False):
 
         title_font = ui.font(default_font, int(ui.inch2pix(0.1)))
         pretty = str(distro[0].upper() + distro[1:].replace('-', ' '))
+        if len(pretty) > 15:
+            pretty = pretty[:15]
         txt = title_font.render(pretty, True, white)
         txt.set_alpha(int(icon2 * 255))
         canvas.blit(txt, [WIDTH / 4 * 3 - txt.get_width() / 2 + ui.inch2pix(0.05), HEIGHT - ui.inch2pix(0.23)])
@@ -1897,7 +1919,11 @@ def splash(extension, app, distro, icon=False):
                 animator.animate("start", [0, 0])
         py_root.fill([0, 0, 0, 255])
         # canvas.set_alpha(50)
-        py_root.blit(canvas, [0, 0])
+        if light == True:
+            py_root.blit(canvas, [0, 0], special_flags=(pygame.BLEND_RGBA_ADD))
+        else:
+            py_root.blit(canvas, [0, 0])
+
         pygame.display.update()
         animator.update()
         fpsClock.tick(FPS)
@@ -1910,7 +1936,7 @@ def splash(extension, app, distro, icon=False):
 
 
 
-args = sys.argv# + [r'''wsl$\Ubuntu-20.04\home\opticos\.bashrc''']#[r"C:\Users\PEF\Desktop\GWSL-Source\assets\x11-icon.png"]
+args = sys.argv# + [r'''C:\Users\PEF\Desktop\Shared 11\OpenInWSL-Source-main\OpenInWSL-Source-main\blur.py''']#[r"C:\Users\PEF\Desktop\GWSL-Source\assets\x11-icon.png"]
 
 if __name__ == "__main__":
     #logger.info(str(args))
