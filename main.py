@@ -948,7 +948,6 @@ def create(extension, test_file=False, comd=None, machine=None):
     machines = re.sub(r'[^a-zA-Z0-9./\n-]', r'', machines).splitlines()
     machines[:] = (value for value in machines if value != "")
 
-    machines = ["test"]
 
     if len(machines) > 1:
         # animator.animate("start", [0, 0])
