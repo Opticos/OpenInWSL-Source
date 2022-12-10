@@ -49,6 +49,9 @@ https://www.tcl.tk/software/tcltk/license.html
 #TTK Bootstrap
 https://github.com/israel-dryer/ttkbootstrap/blob/master/LICENSE
 
+#sv-ttk
+https://github.com/rdbende/Sun-Valley-ttk-theme
+
 #Psutil
 https://github.com/giampaolo/psutil/blob/master/LICENSE
 

@@ -4,9 +4,10 @@
 
 # Copyright Paul-E / Opticos Studios 2021-♾
 #print("GO PYTHON!!!")
-version = "1.5 store"
+version = "1.7 MSIX"
 lc_name = "Licenses1.txt"
 import time
+import re
 
 
 # Here we go
@@ -22,6 +23,7 @@ import winreg
 #import titlebar
 import threading
 import webbrowser
+import ipaddress
 # So this is like a strange descendant of GWSL. Lots of common code.
 
 default_icon = "oiwcenteredsmall.png"#"icon3.png"
@@ -30,9 +32,12 @@ program_name = "OpenInWSL"
 
 #args = sys.argv + ["--r"] + [r"C:\Users\PEF\AppData\Roaming\OpenInWSL\settings.json"]#[r"C:\Users\PEF\Desktop\GWSL-Source\assets\x11-icon.png"]
 
+BUILD_MODE = "WIN32"  # MSIX or WIN32
 BUILD_MODE = "MSIX"  # MSIX or WIN32
 
 debug = False
+
+
 
 frozen = 'not'
 if getattr(sys, 'frozen', False):
@@ -98,35 +103,27 @@ try:
         print("creating settings")
     else:
         sett = iset.read()
-        if sett["conf_ver"] >= 1:
+        if sett["conf_ver"] >= 2:
             if debug == True:
                 print("Settings up to date")
         else:
             print("Updating settings")
             old_iset = iset.read()
             iset.create(app_path + "\\settings.json")
-            """
+
             new_iset = iset.read()
 
             # migrate user settings
-            new_iset["putty"]["ip"] = old_iset["putty"]["ip"]
-            new_iset["distro_blacklist"] = old_iset["distro_blacklist"]
-            new_iset["app_blacklist"] = old_iset["app_blacklist"]
-            new_iset["xserver_profiles"] = old_iset["xserver_profiles"]
+            new_iset["backend"] = old_iset["backend"]
+            new_iset["acrylic_enabled"] = old_iset["acrylic_enabled"]
+            new_iset["theme"] = old_iset["theme"]
+            new_iset["assocs"] = old_iset["assocs"]
             try:
-                new_iset["general"]["acrylic_enabled"] = old_iset["general"]["acrylic_enabled"]
-            except:
-                pass
-            try:
-                new_iset["general"]["start_menu_mode"] = old_iset["general"]["start_menu_mode"]
-            except:
-                pass
-            try:
-                new_iset["general"]["shell_gui"] = old_iset["general"]["shell_gui"]
+                new_iset["hide_donation_reminder"] = old_iset["hide_donation_reminder"]
             except:
                 pass
             iset.set(new_iset)
-            """
+
 
     # Get the script ready
     import wsl_tools as tools
@@ -313,6 +310,8 @@ if int(platform.release()) >= 8:
 from win32api import GetMonitorInfo, MonitorFromPoint
 from pathlib import Path
 
+sett = iset.read()
+show_donate = not sett["hide_donation_reminder"]
 
 def runs(distro, command, nolog=False):
     #cmd = '"' + str(command) + '&"'
@@ -367,7 +366,7 @@ def get_ip(machine):
 def get_version(machine):
     try:
         machines = os.popen("wsl.exe -l -v").read()  # lines()
-        machines = re.sub(r'[^a-z A-Z0-9./\n-]', r'', machines).splitlines()
+        machines = re.sub(r'[^a-z A-Z0-9_./\n-]', r'', machines).splitlines()
         # machines = machines.splitlines()
         machines2 = []
         wsl_1 = True
@@ -532,6 +531,32 @@ def open_help(context):
     #print("helper", context)
     webbrowser.open("https://opticos.github.io/openinwsl/help")
 
+import win32mica
+from win32mica import MICAMODE, ApplyMica
+
+#mode = MICAMODE.DARK  # Dark mode mica effect
+
+#from ttkthemes import ThemedStyle
+
+import sv_ttk
+
+def dark_title_bar(window, dark):
+    #window.update()
+
+    DWMWA_USE_IMMERSIVE_DARK_MODE = 20
+    set_window_attribute = ctypes.windll.dwmapi.DwmSetWindowAttribute
+    get_parent = ctypes.windll.user32.GetParent
+    hwnd = get_parent(window.winfo_id())
+    rendering_policy = DWMWA_USE_IMMERSIVE_DARK_MODE
+    value = 2 if dark else 0
+    value = ctypes.c_int(value)
+    set_window_attribute(hwnd, rendering_policy, ctypes.byref(value), ctypes.sizeof(value))
+
+    root = window
+    root.geometry(str(root.winfo_width()+1) + "x" + str(root.winfo_height()+1))
+    #Returns to original size
+    root.geometry(str(root.winfo_width()-1) + "x" + str(root.winfo_height()-1))
+
 
 def home():
     #ui.set_icons(asset_dir + "Paper/")
@@ -550,15 +575,43 @@ def home():
             en = "superhero"
         elif sett["theme"] == "light":
             en = "lumen"
-
-        root.style = Style(theme=en)#darkly')
+        #style = ThemedStyle(root)
+        #style.set_theme("equilux")
+        #root.style = style
+        #root.style = Style(theme=en)#darkly')
         boxRoot = tk.Toplevel(master=root)
+
         boxRoot.withdraw()
+
+    #get tkinter hwnd
+    hwnd = boxRoot.winfo_id()
+
+    if sett["theme"] == "dark":
+        sv_ttk.set_theme("dark")
+        mode = win32mica.MICAMODE.DARK
+    elif sett["theme"] == "light":
+        sv_ttk.set_theme("light")
+        mode = win32mica.MICAMODE.LIGHT
+
+
+
+    #label = tk.Label(boxRoot, bg='#000000')
+    #boxRoot.lift()
+    #boxRoot.configure(bg="red")
+    #boxRoot.configure(bg="#000000")
+    #boxRoot.wm_attributes("-transparent", "#fafafa")
+    boxRoot.update()
+
+    HWND = windll.user32.GetParent(boxRoot.winfo_id())
+
+    if sett["theme"] == "dark":
+        ApplyMica(HWND, ColorMode=mode)
 
 
 
     #style = Style(theme='superhero')#darkly')
     #boxRoot.style = Style(theme='superhero')#darkly')
+
 
 
     def quitter():
@@ -582,31 +635,33 @@ def home():
     # First the label
     frame_0 = ttk.Frame(boxRoot)
     frame_01 = ttk.Frame(frame_0)
-    logo = tk.Label(frame_01, text=f"Open In WSL",
+    logo = tk.Label(frame_01, text=f"Open In WSL",# font="SunValleyTitleLargeFont",
                        justify=LEFT)
     logo.configure(font=("Segoe UI Semibold",13))
     logo.grid(row=0, pady=0, sticky="WN")
 
-    explain = tk.Label(frame_01, text=f"Make Linux Apps Windows File Handlers ({version})", justify=LEFT)
+    explain = tk.Label(frame_01, text=f"Make Linux Apps Windows File Handlers ({version})", justify=LEFT)#, font="SunValleySubtitleFont")
     explain.configure(font=("Segoe UI Semibold",10))
     explain.grid(row=1, pady=0, sticky="wS")
-    frame_01.grid(row=0, column=1, padx=10, pady=20, sticky="NW", rowspan=1)  # , columnspan=3)
+    frame_01.grid(row=0, column=1, padx=5, pady=(25, 20), sticky="NW", rowspan=1)  # , columnspan=3)
 
     imager = Image.open(asset_dir + "oiw6.png")
     # imager = imager.resize([48, 48])
 
-    img = PIL.ImageTk.PhotoImage(imager.resize([75, 75]))
+    img = PIL.ImageTk.PhotoImage(imager.resize([60, 60]))#[75, 75]))
     labelm = tk.Label(frame_0, image=img)
     labelm.image = img
-    labelm.grid(row=0, column=0, padx=10, pady=20)
+    labelm.grid(row=0, column=0, padx=20, pady=(15, 0))
     frame_0.columnconfigure(1, weight=1)
 
     frame_0.grid(row=0, column=0, padx=10, pady=0, sticky="NEW", rowspan=1)  # , columnspan=3)
 
-    frame_1 = ttk.Frame(boxRoot)  # , padding="0.15i")
+    opt_label = ttk.Label(boxRoot, text=" Open In WSL Configuration ", font=("SunValleyBodyLargeFont", 9))
 
-    opt_label = ttk.Label(frame_1, text="Open In WSL Configuration:")
-    opt_label.grid(row=0, padx=0, pady=10, sticky="w")
+    frame_1 = ttk.LabelFrame(boxRoot, style="Card.TFrame", padding="0.14i", labelwidget=opt_label)#text=" Open In WSL Configuration ", , font="SunValleyBodyStrongFont")
+
+    #opt_label = ttk.Label(frame_1, text="Open In WSL Configuration:")
+    #opt_label.grid(row=0, padx=0, pady=10, sticky="w")
 
 
     gui_frame = ttk.Frame(frame_1)
@@ -676,11 +731,26 @@ def home():
         sett["theme"] = darkmode.get()
         iset.set(sett)
         color = darkmode.get()
-        tk.messagebox.showinfo(master=boxRoot, title="Theme Changed", message="Restart Open In WSL to apply changes")
+        HWND = windll.user32.GetParent(boxRoot.winfo_id())
+
+        #tk.messagebox.showinfo(master=boxRoot, title="Theme Changed", message="Restart Open In WSL to apply changes")
+        if darkmode.get() == "dark":
+            sv_ttk.use_dark_theme()
+            dark_title_bar(boxRoot, True)
+            mode = win32mica.MICAMODE.DARK
+            ApplyMica(HWND, ColorMode=mode)
+        elif darkmode.get() == "light":
+            sv_ttk.use_light_theme()
+            dark_title_bar(boxRoot, False)
+            mode = win32mica.MICAMODE.LIGHT
+            #ApplyMica(HWND, ColorMode=mode)
+            win32mica.Disable(HWND)
 
 
 
-    x_lab = ttk.Label(dark_frame, text="Color Theme: ")
+
+
+    x_lab = ttk.Label(dark_frame, text="App Theme: ")
     x_lab.grid(column=0, row=0, pady=10, sticky="w")
 
     dark_radio = ttk.Radiobutton(dark_frame, text="Dark", value='dark', variable=darkmode, command=set_theme)
@@ -698,11 +768,13 @@ def home():
         #print("opening association manager")
         manage_assoc(parent=boxRoot)
 
-    manage_button = ttk.Button(frame_1, text="Manage File Associations", style="secondary.TButton", command=manage)
-    manage_button.grid(row=6, padx=0, pady=10, ipadx=5, sticky="w")
+    frame_buttons = ttk.Frame(boxRoot, padding="0.14i") #style="Card.TFrame"
+
+    manage_button = ttk.Button(frame_buttons, text="Manage File Associations", style="secondary.TButton", command=manage)
+    manage_button.grid(row=0, column=0, padx=0, pady=10, ipadx=5, sticky="w")
 
     ########
-    frame_22 = ttk.Frame(frame_1)
+    frame_22 = ttk.Frame(frame_buttons)
     def config():
         old_pat = os.getcwd()
         os.chdir(app_path)
@@ -712,14 +784,14 @@ def home():
 
     def get_gwsl():
         webbrowser.open("ms-windows-store://pdp/?productid=9nl6kd1h33v3")
-    manage_button = ttk.Button(frame_22, text="Get GWSL XServer", style="primary.Link.TButton", command=get_gwsl)
-    manage_button.grid(row=0, padx=0, pady=5, ipadx=5, sticky="W", column=0)
+    manage_button = ttk.Button(frame_buttons, text="Get GWSL XServer", style="primary.Link.TButton", command=get_gwsl)
+    #manage_button.grid(row=0, padx=0, pady=5, ipadx=5, sticky="W", column=0)
 
     def optic_web():
         webbrowser.open("https://sites.google.com/bartimee.com/opticos-studios/home")
 
-    manage_button = ttk.Button(frame_22, text="Opticos Website", style="primary.Link.TButton", command=optic_web)
-    manage_button.grid(row=0, padx=0, pady=5, ipadx=5, sticky="E", column=3)
+    #manage_button = ttk.Button(frame_22, text="Opticos Website", style="primary.Link.TButton", command=optic_web)
+    manage_button.grid(row=0, padx=0, pady=5, ipadx=20, sticky="E", column=2)
 
     def logs():
         old_pat = os.getcwd()
@@ -742,8 +814,7 @@ def home():
     frame_22.columnconfigure(1, weight=1)
     frame_22.columnconfigure(2, weight=1)
 
-    frame_22.grid(row=7, sticky="EW", columnspan=3, pady=10)
-
+    frame_22.grid(row=1, sticky="SEW", columnspan=1, pady=(10, 6))#, padx="0.14i")
     frame_1.columnconfigure(0, weight=1)
 
     def context():
@@ -782,6 +853,40 @@ def home():
     cont_button = ttk.Checkbutton(frame_1, text='Show "Open In WSL" in Explorer Context Menu',  command=context, variable=contexter)
     cont_button.grid(row=4, padx=0, pady=10, ipadx=5, sticky="w")
 
+
+    # Donation disabling system (11/30/22)
+    def hide_donate():
+        if donater.get() == 1:
+            show_donate = False
+            sett = iset.read()
+            sett["hide_donation_reminder"] = True
+            iset.set(sett)
+
+            donate.grid_forget()
+
+        else:
+            show_donate = True
+            sett = iset.read()
+            sett["hide_donation_reminder"] = False
+            iset.set(sett)
+            donate.grid(row=3, padx=30, pady=0, ipadx=5, ipady=5, sticky="wE")
+
+
+    donater = tk.IntVar()
+    donater.set(1)
+    try:
+        sett = iset.read()
+        print(sett["hide_donation_reminder"])
+        donater.set(1 if sett["hide_donation_reminder"] else 0)
+
+    except:
+        donater.set(0)
+
+
+    ad_button = ttk.Checkbutton(frame_1, text='Disable Donation Reminders', command=hide_donate,
+                                  variable=donater)
+    ad_button.grid(row=5, padx=0, pady=10, ipadx=5, sticky="w")
+
     """
     autolaunch = tk.IntVar()
     sett = iset.read()
@@ -802,19 +907,25 @@ def home():
     cont_button.grid(row=5, padx=0, pady=10, ipadx=5, sticky="w")
     """
     #frame_1.columnconfigure(1, weight=1)
-    frame_1.grid(row=1, column=0, padx=30, pady=10, sticky="NEW")  # , columnspan=3)
+    frame_1.grid(row=1, column=0, padx="0.25i", pady=10, sticky="NEW")  # , columnspan=3)
+
+    frame_buttons.columnconfigure(0, weight=2)
+
+    frame_buttons.grid(row=2, column=0, padx="0.11i", pady=0, sticky="NEWS")
 
     def donate():
         webbrowser.open_new("https://opticos.github.io/openinwsl/#donate")
-    donate = ttk.Button(boxRoot, text="Please Consider Donating!", style="success.TButton", command=donate)
-    donate.grid(row=2, padx=30, pady=0, ipadx=5, ipady=5, sticky="wE")
+    donate = ttk.Button(boxRoot, text="Please Consider Donating 💖", style="Accent.TButton", command=donate) # old for bootstrapstyle="success.TButton"
+
+    if show_donate:
+        donate.grid(row=3, padx=30, pady=0, ipadx=5, ipady=5, sticky="wE")
 
     #frame_2.columnconfigure(1, weight=1)
     #frame_2.grid(row=2, column=0, padx=20, pady=20, sticky="NWE")#, columnspan=4)
     #frame_2.grid_columnconfigure(1, weight=1)
 
     frame_3 = ttk.Frame(boxRoot)#, borderwidth=3, relief="ridge")
-    cancel = ttk.Button(frame_3, text="Close", style="secondary.TButton", command=quitter)
+    cancel = ttk.Button(frame_3, text="Opticos Website", style="secondary.TButton", command=optic_web)
     cancel.grid(row=0, column=0, sticky="We", padx=5, ipadx=5)
 
     manage_button = ttk.Button(frame_3, text="Configuration File", style="primary.Outline.TButton", command=config)
@@ -847,7 +958,7 @@ def home():
     frame_3.columnconfigure(2, weight=1)
     frame_3.columnconfigure(3, weight=1)
 
-    frame_3.grid(row=3, column=0, padx=25, pady=20, sticky="SWE")
+    frame_3.grid(row=4, column=0, padx=25, pady=(20, 23), sticky="SWE")
     #HWN = root.winfo_id()
     #titlebar.ChangeMenuBarColor(HWN)
     #boxRoot.overrideredirect(True)
@@ -858,20 +969,34 @@ def home():
     #boxRoot.bind("<Return>", login)
     boxRoot.columnconfigure(0, weight=1)
     boxRoot.rowconfigure(2, weight=1)
+
+
+    if sett["theme"] == "dark":
+        dark_title_bar(boxRoot, True)
+    elif sett["theme"] == "light":
+        dark_title_bar(boxRoot, False)
+
     boxRoot.deiconify()
     #boxRoot.wm_attributes("-topmost", 1)
     #boxRoot.mainloop()
+
+
     boxRoot.update()
     boxRoot.minsize(boxRoot.winfo_width(), boxRoot.winfo_height())
     #boxRoot.geometry('+%d+%d' % (screensize[0] / 2 - boxRoot.winfo_width() / 2,
     #                             screensize[1] / 2 - boxRoot.winfo_height() / 2 - ui.inch2pix(0.5)))
-    
+
+    #HWND = windll.user32.GetParent(boxRoot.winfo_id())
+    #if sett["theme"] == "dark":
+    #    win32mica.ApplyMica(HWND, mode)
+
     while True:
         # draw(canvas, mouse=False)
         boxRoot.update()
         if boxRoot.running == False:
             break
         time.sleep(0.05)
+
 
 def create(extension, test_file=False, comd=None, machine=None):
     #ui.set_icons(asset_dir + "Paper/")
@@ -888,12 +1013,31 @@ def create(extension, test_file=False, comd=None, machine=None):
         sett = iset.read()
         if sett["theme"] == "dark":
             en = "superhero"
+
         elif sett["theme"] == "light":
             en = "lumen"
 
-        root.style = Style(theme=en)  # darkly')
+        #root.style = Style(theme=en)  # darkly')
         boxRoot = tk.Toplevel(master=root)
+
+
         boxRoot.withdraw()
+
+    sett = iset.read()
+    if sett["theme"] == "dark":
+        sv_ttk.set_theme("dark")
+    elif sett["theme"] == "light":
+        sv_ttk.set_theme("light")
+
+    boxRoot.update()
+
+    HWND = windll.user32.GetParent(boxRoot.winfo_id())
+
+    if sv_ttk.get_theme() == "dark":
+        ApplyMica(HWND, ColorMode=win32mica.MICAMODE.DARK)
+    else:
+        win32mica.Disable(HWND)
+        boxRoot.update()
 
 
     #style = Style(theme='superhero')#darkly')
@@ -945,7 +1089,7 @@ def create(extension, test_file=False, comd=None, machine=None):
     selector_label.grid(row=0, column=0, padx=10, pady=0, sticky="W", rowspan=1)
 
     machines = os.popen("wsl.exe -l -q").read()
-    machines = re.sub(r'[^a-zA-Z0-9./\n-]', r'', machines).splitlines()
+    machines = re.sub(r'[^a-zA-Z0-9_./\n-]', r'', machines).splitlines()
     machines[:] = (value for value in machines if value != "")
 
 
@@ -1023,7 +1167,8 @@ def create(extension, test_file=False, comd=None, machine=None):
         except:
             logger.exception("cannot save edited assoc")
     chooser = ttk.Button(frame_1, text="App List", style="secondary.TButton", command=app_choose)
-    chooser.grid(row=1, column=2, padx=0, pady=0, sticky="E", rowspan=1, columnspan=1)
+    chooser.grid(row=1, column=2, padx=(15, 0), pady=0, sticky="ENS", rowspan=1, columnspan=1)
+    frame_1.rowconfigure(1, weight=2)
 
     cmd_label = ttk.Label(frame_1, text="* If using custom arguments, use the #fpth# variable in \nplace of the file path.") #" * Variable #fpth# replaced with filename being opened."
     cmd_label.grid(row=2, column=1, padx=10, pady=10, sticky="W", columnspan=2)
@@ -1119,13 +1264,29 @@ def create(extension, test_file=False, comd=None, machine=None):
     #lbl.grid(row=0, padx=10, pady=10, sticky="EW")
     #boxRoot.grid_rowconfigure(0, weight=0)
 
+    if sv_ttk.get_theme() == "dark":
+        dark_title_bar(boxRoot, True)
+    elif sv_ttk.get_theme() == "light":
+        dark_title_bar(boxRoot, False)
+
     #boxRoot.bind("<Return>", login)
     boxRoot.columnconfigure(0, weight=1)
     boxRoot.rowconfigure(2, weight=1)
     boxRoot.deiconify()
     #boxRoot.wm_attributes("-topmost", 1)
 
+    old = sv_ttk.get_theme()
     while True:
+        if sv_ttk.get_theme() == "light" and old == "dark":
+            win32mica.Disable(HWND)
+            #print("DisableMica")
+            dark_title_bar(boxRoot, False)
+        elif sv_ttk.get_theme() == "dark" and old == "light":
+            #print("enableMica")
+            ApplyMica(HWND, win32mica.MICAMODE.DARK)
+            dark_title_bar(boxRoot, True)
+
+        old = sv_ttk.get_theme()
         # draw(canvas, mouse=False)
         time.sleep(0.05)
         boxRoot.update()
@@ -1196,6 +1357,19 @@ def applist(machine):
     #style = Style(theme='superhero')#superhero or lumen')
     #boxRoot = style.master
 
+    if sv_ttk.get_theme() == "dark":
+        dark_title_bar(boxRoot, True)
+    elif sv_ttk.get_theme() == "light":
+        dark_title_bar(boxRoot, False)
+
+    boxRoot.update()
+    HWND = windll.user32.GetParent(boxRoot.winfo_id())
+
+    if sv_ttk.get_theme() == "dark":
+        ApplyMica(HWND, ColorMode=win32mica.MICAMODE.DARK)
+    else:
+        win32mica.Disable(HWND)
+        boxRoot.update()
 
     def quitter():
         boxRoot.quit()
@@ -1333,11 +1507,21 @@ def applist(machine):
     #boxRoot.wm_attributes("-topmost", 1)
     done = False
 
-
-
+    old = sv_ttk.get_theme()
     while True:
+        if sv_ttk.get_theme() == "light" and old == "dark":
+            win32mica.Disable(HWND)
+            #print("DisableMica")
+            dark_title_bar(boxRoot, False)
+        elif sv_ttk.get_theme() == "dark" and old == "light":
+            #print("enableMica")
+            ApplyMica(HWND, win32mica.MICAMODE.DARK)
+            dark_title_bar(boxRoot, True)
+
+        old = sv_ttk.get_theme()
+
         # draw(canvas, mouse=False)
-        time.sleep(0.05)
+        #time.sleep(0.05)
         boxRoot.update()
         if loading == False and done == False:
             load_msg.destroy()
@@ -1395,8 +1579,22 @@ def manage_assoc(parent=None):
         boxRoot.withdraw()
         #print("ss")
 
+    if sv_ttk.get_theme() == "dark":
+        dark_title_bar(boxRoot, True)
+    elif sv_ttk.get_theme() == "light":
+        dark_title_bar(boxRoot, False)
+
     #style = Style(theme='superhero')#superhero or lumen')
     #boxRoot = style.master
+    boxRoot.update()
+
+    HWND = windll.user32.GetParent(boxRoot.winfo_id())
+
+    if sv_ttk.get_theme() == "dark":
+        ApplyMica(HWND, ColorMode=win32mica.MICAMODE.DARK)
+    else:
+        win32mica.Disable(HWND)
+        boxRoot.update()
 
 
     def quitter():
@@ -1595,10 +1793,20 @@ def manage_assoc(parent=None):
     boxRoot.deiconify()
     #boxRoot.wm_attributes("-topmost", 1)
     done = False
-
-
+    old = sv_ttk.get_theme()
 
     while True:
+        if sv_ttk.get_theme() == "light" and old == "dark":
+            win32mica.Disable(HWND)
+            #print("DisableMica")
+            dark_title_bar(boxRoot, False)
+        elif sv_ttk.get_theme() == "dark" and old == "light":
+            #print("enableMica")
+            ApplyMica(HWND, win32mica.MICAMODE.DARK)
+            dark_title_bar(boxRoot, True)
+
+        old = sv_ttk.get_theme()
+
         # draw(canvas, mouse=False)
         time.sleep(0.05)
         boxRoot.update()
@@ -1653,12 +1861,15 @@ def manage_assoc(parent=None):
 #pg_init = False
 
 def splash(extension, app, distro, icon=False):
+    global show_donate
     ui.set_scale(1)
     # pygame init takes a long time...
     # pygame.display.init()
 
     donate = random.choice([True, False, False, False])
 
+    if not show_donate:
+        donate = False
 
     WIDTH, HEIGHT = ui.inch2pix(2.5), ui.inch2pix(0.8)  ##ui.inch2pix(7.9), ui.inch2pix(5)
 
@@ -1755,6 +1966,8 @@ def splash(extension, app, distro, icon=False):
     except Exception as e:
         logger.exception("Exception occurred - Please reset settings")
         acrylic = True
+
+    show_donate = not sett["hide_donation_reminder"]
 
     import rounder
 
@@ -1935,7 +2148,7 @@ def splash(extension, app, distro, icon=False):
 
 
 
-args = sys.argv# + [r'''C:\Users\PEF\Desktop\Shared 11\OpenInWSL-Source-main\OpenInWSL-Source-main\blur.py''']#[r"C:\Users\PEF\Desktop\GWSL-Source\assets\x11-icon.png"]
+args = sys.argv# + [r'''C:\blur.py''']#[r"C:\Users\PEF\Desktop\GWSL-Source\assets\x11-icon.png"]
 
 if __name__ == "__main__":
     #logger.info(str(args))

@@ -7,7 +7,8 @@ path = None
 def create(path):
     with open(path, "w") as obj:
         app = {
-            "conf_ver":1,
+            "conf_ver":2,
+            "hide_donation_reminder":False,
             "backend":"gwsl",
             "acrylic_enabled":True,
             "theme":"dark",
