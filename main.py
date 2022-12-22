@@ -33,7 +33,6 @@ program_name = "OpenInWSL"
 #args = sys.argv + ["--r"] + [r"C:\Users\PEF\AppData\Roaming\OpenInWSL\settings.json"]#[r"C:\Users\PEF\Desktop\GWSL-Source\assets\x11-icon.png"]
 
 BUILD_MODE = "WIN32"  # MSIX or WIN32
-BUILD_MODE = "MSIX"  # MSIX or WIN32
 
 debug = False
 
