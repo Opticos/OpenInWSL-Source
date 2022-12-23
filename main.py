@@ -625,7 +625,7 @@ def home():
     boxRoot.title("Open In WSL")
     boxRoot.iconname("Dialog")
     WIDTH, HEIGHT = ui.inch2pix(5), ui.inch2pix(5.5)
-    #boxRoot.minsize(WIDTH, HEIGHT)
+    boxRoot.minsize(WIDTH, HEIGHT)
     boxRoot.running = True
     boxRoot.protocol("WM_DELETE_WINDOW", quitter)
     boxRoot.geometry('+%d+%d' % (screensize[0] / 2 - WIDTH / 2, screensize[1] / 2 - HEIGHT / 2 - ui.inch2pix(0.5)))
@@ -973,7 +973,7 @@ def home():
     boxRoot.rowconfigure(1, weight=1)
 
     
-    boxRoot.columnconfigure(0, weight=0)
+    boxRoot.columnconfigure(0, weight=1)
 
     
     boxRoot.rowconfigure(2, weight=1)
@@ -998,7 +998,11 @@ def home():
 
 
     #boxRoot.minsize(boxRoot.winfo_width(), boxRoot.winfo_height())
-    boxRoot.minsize(boxRoot.winfo_reqwidth(), boxRoot.winfo_reqheight())
+
+    rw, rh = boxRoot.winfo_reqwidth(), boxRoot.winfo_reqheight()
+
+    if rw > WIDTH or rh > HEIGHT:
+        boxRoot.minsize(rw, rh)
 
     boxRoot.deiconify()
 
