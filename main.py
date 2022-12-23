@@ -585,6 +585,7 @@ def home():
     #get tkinter hwnd
     hwnd = boxRoot.winfo_id()
 
+    
     if sett["theme"] == "dark":
         sv_ttk.set_theme("dark")
         mode = win32mica.MICAMODE.DARK
@@ -592,7 +593,7 @@ def home():
         sv_ttk.set_theme("light")
         mode = win32mica.MICAMODE.LIGHT
 
-
+    
 
     #label = tk.Label(boxRoot, bg='#000000')
     #boxRoot.lift()
@@ -624,7 +625,7 @@ def home():
     boxRoot.title("Open In WSL")
     boxRoot.iconname("Dialog")
     WIDTH, HEIGHT = ui.inch2pix(5), ui.inch2pix(5.5)
-    boxRoot.minsize(WIDTH, HEIGHT)
+    #boxRoot.minsize(WIDTH, HEIGHT)
     boxRoot.running = True
     boxRoot.protocol("WM_DELETE_WINDOW", quitter)
     boxRoot.geometry('+%d+%d' % (screensize[0] / 2 - WIDTH / 2, screensize[1] / 2 - HEIGHT / 2 - ui.inch2pix(0.5)))
@@ -767,10 +768,10 @@ def home():
         #print("opening association manager")
         manage_assoc(parent=boxRoot)
 
-    frame_buttons = ttk.Frame(boxRoot, padding="0.14i") #style="Card.TFrame"
+    frame_buttons = ttk.Frame(boxRoot) #style="Card.TFrame"
 
     manage_button = ttk.Button(frame_buttons, text="Manage File Associations", style="secondary.TButton", command=manage)
-    manage_button.grid(row=0, column=0, padx=0, pady=10, ipadx=5, sticky="w")
+    manage_button.grid(row=0, column=0, padx=0, ipadx=5, sticky="w")
 
     ########
     frame_22 = ttk.Frame(frame_buttons)
@@ -790,7 +791,7 @@ def home():
         webbrowser.open("https://sites.google.com/bartimee.com/opticos-studios/home")
 
     #manage_button = ttk.Button(frame_22, text="Opticos Website", style="primary.Link.TButton", command=optic_web)
-    manage_button.grid(row=0, padx=0, pady=5, ipadx=20, sticky="E", column=2)
+    manage_button.grid(row=0, padx=0, ipadx=20, sticky="E", column=2)
 
     def logs():
         old_pat = os.getcwd()
@@ -868,7 +869,7 @@ def home():
             sett = iset.read()
             sett["hide_donation_reminder"] = False
             iset.set(sett)
-            donate.grid(row=3, padx=30, pady=0, ipadx=5, ipady=5, sticky="wE")
+            donate.grid(row=3, padx="0.2i", ipadx=5, sticky="wE", pady="0.1i")
 
 
     donater = tk.IntVar()
@@ -884,7 +885,7 @@ def home():
 
     ad_button = ttk.Checkbutton(frame_1, text='Disable Donation Reminders', command=hide_donate,
                                   variable=donater)
-    ad_button.grid(row=5, padx=0, pady=10, ipadx=5, sticky="w")
+    ad_button.grid(row=5, padx=0, pady=10, ipadx=5, sticky="wNS")
 
     """
     autolaunch = tk.IntVar()
@@ -906,43 +907,43 @@ def home():
     cont_button.grid(row=5, padx=0, pady=10, ipadx=5, sticky="w")
     """
     #frame_1.columnconfigure(1, weight=1)
-    frame_1.grid(row=1, column=0, padx="0.25i", pady=10, sticky="NEW")  # , columnspan=3)
+    frame_1.grid(row=1, column=0, padx="0.2i", pady="0.1i", sticky="EW")  # , columnspan=3)
 
     frame_buttons.columnconfigure(0, weight=2)
 
-    frame_buttons.grid(row=2, column=0, padx="0.11i", pady=0, sticky="NEWS")
+    frame_buttons.grid(row=2, column=0, padx="0.2i", pady=("0.1i","0.1i"), sticky="EW")
 
     def donate():
         webbrowser.open_new("https://opticos.github.io/openinwsl/#donate")
     donate = ttk.Button(boxRoot, text="Please Consider Donating 💖", style="Accent.TButton", command=donate) # old for bootstrapstyle="success.TButton"
 
     if show_donate:
-        donate.grid(row=3, padx=30, pady=0, ipadx=5, ipady=5, sticky="wE")
+        donate.grid(row=3, padx="0.2i", ipadx=5, sticky="wE", pady="0.1i")
 
     #frame_2.columnconfigure(1, weight=1)
     #frame_2.grid(row=2, column=0, padx=20, pady=20, sticky="NWE")#, columnspan=4)
     #frame_2.grid_columnconfigure(1, weight=1)
 
     frame_3 = ttk.Frame(boxRoot)#, borderwidth=3, relief="ridge")
-    cancel = ttk.Button(frame_3, text="Opticos Website", style="secondary.TButton", command=optic_web)
-    cancel.grid(row=0, column=0, sticky="We", padx=5, ipadx=5)
+    cancel = ttk.Button(frame_3, text="Website", style="secondary.TButton", command=optic_web)
+    cancel.grid(row=0, column=0, sticky="we", padx=(0,5), ipadx=5, pady=("0.1i", 0))
 
-    manage_button = ttk.Button(frame_3, text="Configuration File", style="primary.Outline.TButton", command=config)
-    manage_button.grid(row=0, padx=5, pady=5, ipadx=5, sticky="we", column=1)
+    manage_button = ttk.Button(frame_3, text="Configure", style="primary.Outline.TButton", command=config)
+    manage_button.grid(row=0, padx=5, ipadx=5, sticky="we", column=1, pady=("0.1i", 0))
 
 
-    manage_button = ttk.Button(frame_3, text="Licenses", style="primary.Outline.TButton", command=license)
-    manage_button.grid(row=0, padx=5, pady=5, ipadx=0, sticky="we", column=2)
+    manage_button = ttk.Button(frame_3, text="License", style="primary.Outline.TButton", command=license)
+    manage_button.grid(row=0, padx=5, ipadx=0, sticky="we", column=2, pady=("0.1i", 0))
 
     manage_button = ttk.Button(frame_3, text="Logs", style="primary.Outline.TButton", command=logs)
-    manage_button.grid(row=0, padx=5, pady=5, ipadx=0, sticky="We", column=3)
+    manage_button.grid(row=0, padx=5, ipadx=0, sticky="We", column=3, pady=("0.1i", 0))
 
 
 
     def helper():
         open_help("home")
     help = ttk.Button(frame_3, text="Help", command=helper)
-    help.grid(row=0, column=4, sticky="wE", padx=5, ipadx=5)
+    help.grid(row=0, column=4, sticky="wE", padx=(5, 0), ipadx=5, pady=("0.1i", 0))
 
 
 
@@ -950,14 +951,16 @@ def home():
     #apply.grid(row=0, column=2, sticky="WE", padx=5, ipadx=5)
 
     frame_3.columnconfigure(0, weight=1)
-    frame_3.columnconfigure(4, weight=1)
-
-
     frame_3.columnconfigure(1, weight=1)
     frame_3.columnconfigure(2, weight=1)
     frame_3.columnconfigure(3, weight=1)
+    frame_3.columnconfigure(4, weight=1)
 
-    frame_3.grid(row=4, column=0, padx=25, pady=(20, 23), sticky="SWE")
+    frame_3.rowconfigure(1, weight=2)
+    frame_3.rowconfigure(2, weight=3)
+
+
+    frame_3.grid(row=4, column=0, padx="0.2i", sticky="WESN", ipady="0.1i", pady=(0, "0.2i"))
     #HWN = root.winfo_id()
     #titlebar.ChangeMenuBarColor(HWN)
     #boxRoot.overrideredirect(True)
@@ -966,8 +969,19 @@ def home():
     #boxRoot.grid_rowconfigure(0, weight=0)
 
     #boxRoot.bind("<Return>", login)
-    boxRoot.columnconfigure(0, weight=1)
+
+    boxRoot.rowconfigure(1, weight=1)
+
+    
+    boxRoot.columnconfigure(0, weight=0)
+
+    
     boxRoot.rowconfigure(2, weight=1)
+
+    boxRoot.rowconfigure(3, weight=0)
+
+    boxRoot.rowconfigure(4, weight=1)
+
 
 
     if sett["theme"] == "dark":
@@ -975,13 +989,20 @@ def home():
     elif sett["theme"] == "light":
         dark_title_bar(boxRoot, False)
 
-    boxRoot.deiconify()
+    
     #boxRoot.wm_attributes("-topmost", 1)
     #boxRoot.mainloop()
 
 
     boxRoot.update()
-    boxRoot.minsize(boxRoot.winfo_width(), boxRoot.winfo_height())
+
+
+    #boxRoot.minsize(boxRoot.winfo_width(), boxRoot.winfo_height())
+    boxRoot.minsize(boxRoot.winfo_reqwidth(), boxRoot.winfo_reqheight())
+
+    boxRoot.deiconify()
+
+    
     #boxRoot.geometry('+%d+%d' % (screensize[0] / 2 - boxRoot.winfo_width() / 2,
     #                             screensize[1] / 2 - boxRoot.winfo_height() / 2 - ui.inch2pix(0.5)))
 
@@ -1168,9 +1189,12 @@ def create(extension, test_file=False, comd=None, machine=None):
     chooser = ttk.Button(frame_1, text="App List", style="secondary.TButton", command=app_choose)
     chooser.grid(row=1, column=2, padx=(15, 0), pady=0, sticky="ENS", rowspan=1, columnspan=1)
     frame_1.rowconfigure(1, weight=2)
+    boxRoot.update()
+    leng = chooser.winfo_width() + cmd.winfo_width()
 
-    cmd_label = ttk.Label(frame_1, text="* If using custom arguments, use the #fpth# variable in \nplace of the file path.") #" * Variable #fpth# replaced with filename being opened."
-    cmd_label.grid(row=2, column=1, padx=10, pady=10, sticky="W", columnspan=2)
+
+    cmd_label = ttk.Label(frame_1, text="* If using custom arguments, use the #fpth# variable in place of the file path.", wraplength="3i") #" * Variable #fpth# replaced with filename being opened."
+    cmd_label.grid(row=2, column=1, padx=10, pady=10, sticky="WE", columnspan=2)
 
     cmd_label = ttk.Label(frame_1,
                           text="Example: gedit --new-window #fpth#")  # " * Variable #fpth# replaced with filename being opened."
@@ -1185,7 +1209,7 @@ def create(extension, test_file=False, comd=None, machine=None):
         except:
             logger.exception("cannot launch manpage func")
     man = ttk.Button(frame_1, text="See Command Manpage", command=manpage, style="info.TButton")
-    man.grid(row=4, column=1, padx=0, pady=35, ipadx=5, sticky="E", rowspan=1, columnspan=2)
+    man.grid(row=4, column=1, padx=0, ipadx=5, sticky="E", rowspan=1, columnspan=2, pady=("0.2i", 0))
 
     frame_1.columnconfigure(1, weight=1)
     frame_1.grid(row=1, column=0, padx=20, pady=10, sticky="NEW")  # , columnspan=3)
@@ -1245,17 +1269,18 @@ def create(extension, test_file=False, comd=None, machine=None):
 
     test = ttk.Button(frame_3, text="Test Configuration", style="secondary.TButton", command=tester)
     if test_file != False:
-        test.grid(row=0, column=2, sticky="WE", padx=5, ipadx=5)
+        test.grid(row=0, column=2, sticky="WE", padx=(0,5), ipadx=5)
         column += 1
         frame_3.columnconfigure(3, weight=1)
     apply = ttk.Button(frame_3, text="Save Configuration", style="success.TButton", command=saver)
-    apply.grid(row=0, column=column, sticky="WE", padx=5, ipadx=5)
+    apply.grid(row=0, column=column, sticky="WE", padx=(5,0), ipadx=5)
 
     frame_3.columnconfigure(0, weight=1)
     frame_3.columnconfigure(1, weight=1)
     frame_3.columnconfigure(2, weight=1)
+    frame_3.rowconfigure(0, weight=1)
 
-    frame_3.grid(row=3, column=0, padx=20, pady=20, sticky="SWE")
+    frame_3.grid(row=3, column=0, padx=20, pady=20, sticky="SWEN")
     #HWN = root.winfo_id()
     #titlebar.ChangeMenuBarColor(HWN)
     #boxRoot.overrideredirect(True)
@@ -1271,8 +1296,13 @@ def create(extension, test_file=False, comd=None, machine=None):
     #boxRoot.bind("<Return>", login)
     boxRoot.columnconfigure(0, weight=1)
     boxRoot.rowconfigure(2, weight=1)
+
+
+    
     boxRoot.deiconify()
     #boxRoot.wm_attributes("-topmost", 1)
+    
+    
 
     old = sv_ttk.get_theme()
     while True:
