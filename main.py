@@ -556,7 +556,23 @@ def dark_title_bar(window, dark):
     #Returns to original size
     root.geometry(str(root.winfo_width()-1) + "x" + str(root.winfo_height()-1))
 
+def style_dpi(root):
+    style = ttk.Style(root)
 
+    button_font_point = 9#int(ui.inch2pix(0.1) * (12 / 16))
+    style.configure('TButton', font=("", button_font_point))
+
+    radiobutton_font_point = 9#int(ui.inch2pix(0.099) * (12 / 16))
+
+    style.configure('TRadiobutton', font=("", radiobutton_font_point))
+
+    label_font_point = 9#int(ui.inch2pix(0.099) * (12 / 16))
+    style.configure('TLabel', font=("", label_font_point))
+
+    checkbutton_font_point = 9#int(ui.inch2pix(0.099) * (12 / 16))
+    style.configure('TCheckbutton', font=("", checkbutton_font_point))
+
+#from ttkthemes import ThemedStyle
 def home():
     #ui.set_icons(asset_dir + "Paper/")
     #k = get_light()
@@ -585,7 +601,8 @@ def home():
     #get tkinter hwnd
     hwnd = boxRoot.winfo_id()
 
-    
+
+
     if sett["theme"] == "dark":
         sv_ttk.set_theme("dark")
         mode = win32mica.MICAMODE.DARK
@@ -593,7 +610,16 @@ def home():
         sv_ttk.set_theme("light")
         mode = win32mica.MICAMODE.LIGHT
 
-    
+    # Make style detect DPI
+    style_dpi(root)
+
+
+    #style = ThemedStyle(root)
+    #style.set_theme("yaru")
+    #boxRoot.configure(bg=style.lookup("TButton", "background"))
+
+    #root.tk.call("source", "azure.tcl")
+    #root.tk.call("set_theme", "dark")
 
     #label = tk.Label(boxRoot, bg='#000000')
     #boxRoot.lift()
@@ -606,7 +632,6 @@ def home():
 
     if sett["theme"] == "dark":
         ApplyMica(HWND, ColorMode=mode)
-
 
 
     #style = Style(theme='superhero')#darkly')
@@ -643,18 +668,20 @@ def home():
     explain = tk.Label(frame_01, text=f"Make Linux Apps Windows File Handlers ({version})", justify=LEFT)#, font="SunValleySubtitleFont")
     explain.configure(font=("Segoe UI Semibold",10))
     explain.grid(row=1, pady=0, sticky="wS")
-    frame_01.grid(row=0, column=1, padx=5, pady=(25, 20), sticky="NW", rowspan=1)  # , columnspan=3)
+    frame_01.grid(row=0, column=1, padx=0, pady=("0.23i", "0.2i"), sticky="NW", rowspan=1)  # , columnspan=3)
 
     imager = Image.open(asset_dir + "oiw6.png")
     # imager = imager.resize([48, 48])
 
-    img = PIL.ImageTk.PhotoImage(imager.resize([60, 60]))#[75, 75]))
+    im_size = ui.inch2pix(0.5)
+
+    img = PIL.ImageTk.PhotoImage(imager.resize([im_size, im_size]))#[75, 75]))
     labelm = tk.Label(frame_0, image=img)
     labelm.image = img
-    labelm.grid(row=0, column=0, padx=20, pady=(15, 0))
+    labelm.grid(row=0, column=0, padx="0.2i", pady=("0.15i", 0))
     frame_0.columnconfigure(1, weight=1)
 
-    frame_0.grid(row=0, column=0, padx=10, pady=0, sticky="NEW", rowspan=1)  # , columnspan=3)
+    frame_0.grid(row=0, column=0, padx="0.1i", pady=0, sticky="NEW", rowspan=1)  # , columnspan=3)
 
     opt_label = ttk.Label(boxRoot, text=" Open In WSL Configuration ", font=("SunValleyBodyLargeFont", 9))
 
@@ -674,16 +701,16 @@ def home():
         sett["backend"] = backend.get()
         iset.set(sett)
     x_lab = ttk.Label(gui_frame, text="Graphical Backend: ")
-    x_lab.grid(column=0, row=0, pady=10, sticky="w")
+    x_lab.grid(column=0, row=0, pady="0.1i", sticky="w")
 
     gwsl_radio = ttk.Radiobutton(gui_frame, text="GWSL", value='gwsl', variable=backend, command=set_back)#, style=style)
-    gwsl_radio.grid(row=0, column=1, sticky="w", ipadx=5)
+    gwsl_radio.grid(row=0, column=1, sticky="w", ipadx="0.05i")
 
     wslg_radio = ttk.Radiobutton(gui_frame, text="wslg", value='wslg', variable=backend, command=set_back)
-    wslg_radio.grid(row=0, column=2, sticky="w", ipadx=5)
+    wslg_radio.grid(row=0, column=2, sticky="w", ipadx="0.05i")
 
     xserver_radio = ttk.Radiobutton(gui_frame, text="Other XServer", value='x', variable=backend, command=set_back)
-    xserver_radio.grid(row=0, column=3, sticky="w", ipadx=5)
+    xserver_radio.grid(row=0, column=3, sticky="w", ipadx="0.05i")
 
     gui_frame.grid(row=1, sticky="w", padx=0)
 
@@ -703,13 +730,13 @@ def home():
         iset.set(sett)
 
     x_lab = ttk.Label(acrylic_frame, text="Popup Transparency: ")
-    x_lab.grid(column=0, row=0, pady=10, sticky="w")
+    x_lab.grid(column=0, row=0, pady="0.1i", sticky="w")
 
     gwsl_radio = ttk.Radiobutton(acrylic_frame, text="On", value=1, variable=acrylic, command=set_acrylic)
-    gwsl_radio.grid(row=0, column=1, sticky="w", ipadx=5)
+    gwsl_radio.grid(row=0, column=1, sticky="w", ipadx="0.05i")
 
     wslg_radio = ttk.Radiobutton(acrylic_frame, text="Off", value=0, variable=acrylic, command=set_acrylic)
-    wslg_radio.grid(row=0, column=2, sticky="w", ipadx=5)
+    wslg_radio.grid(row=0, column=2, sticky="w", ipadx="0.05i")
 
 
     acrylic_frame.grid(row=2, sticky="w", padx=0)
@@ -746,18 +773,20 @@ def home():
             #ApplyMica(HWND, ColorMode=mode)
             win32mica.Disable(HWND)
 
+        style_dpi(root)
+
 
 
 
 
     x_lab = ttk.Label(dark_frame, text="App Theme: ")
-    x_lab.grid(column=0, row=0, pady=10, sticky="w")
+    x_lab.grid(column=0, row=0, pady="0.1i", sticky="w")
 
     dark_radio = ttk.Radiobutton(dark_frame, text="Dark", value='dark', variable=darkmode, command=set_theme)
-    dark_radio.grid(row=0, column=1, sticky="w", ipadx=5)
+    dark_radio.grid(row=0, column=1, sticky="w", ipadx="0.05i")
 
     light_radio = ttk.Radiobutton(dark_frame, text="Light", value='light', variable=darkmode, command=set_theme)
-    light_radio.grid(row=0, column=2, sticky="w", ipadx=5)
+    light_radio.grid(row=0, column=2, sticky="w", ipadx="0.05i")
 
     #auto_radio = ttk.Radiobutton(dark_frame, text="Auto", value='auto', variable=darkmode, command=set_theme)
     #auto_radio.grid(row=0, column=3, sticky="w", ipadx=5)
@@ -771,7 +800,7 @@ def home():
     frame_buttons = ttk.Frame(boxRoot) #style="Card.TFrame"
 
     manage_button = ttk.Button(frame_buttons, text="Manage File Associations", style="secondary.TButton", command=manage)
-    manage_button.grid(row=0, column=0, padx=0, ipadx=5, sticky="w")
+    manage_button.grid(row=0, column=0, padx=0, ipadx="0.05i", sticky="w", pady=0)
 
     ########
     frame_22 = ttk.Frame(frame_buttons)
@@ -791,7 +820,7 @@ def home():
         webbrowser.open("https://sites.google.com/bartimee.com/opticos-studios/home")
 
     #manage_button = ttk.Button(frame_22, text="Opticos Website", style="primary.Link.TButton", command=optic_web)
-    manage_button.grid(row=0, padx=0, ipadx=20, sticky="E", column=2)
+    manage_button.grid(row=0, padx=0, ipadx="0.2i", sticky="E", column=2)
 
     def logs():
         old_pat = os.getcwd()
@@ -814,7 +843,7 @@ def home():
     frame_22.columnconfigure(1, weight=1)
     frame_22.columnconfigure(2, weight=1)
 
-    frame_22.grid(row=1, sticky="SEW", columnspan=1, pady=(10, 6))#, padx="0.14i")
+    #frame_22.grid(row=1, sticky="SEW", columnspan=1, pady=("0.1i", "0.05i"))#, padx="0.14i")
     frame_1.columnconfigure(0, weight=1)
 
     def context():
@@ -851,7 +880,7 @@ def home():
     #contexter.set(1)
 
     cont_button = ttk.Checkbutton(frame_1, text='Show "Open In WSL" in Explorer Context Menu',  command=context, variable=contexter)
-    cont_button.grid(row=4, padx=0, pady=10, ipadx=5, sticky="w")
+    cont_button.grid(row=4, padx=0, pady="0.1i", ipadx="0.05i", sticky="w")
 
 
     # Donation disabling system (11/30/22)
@@ -869,7 +898,8 @@ def home():
             sett = iset.read()
             sett["hide_donation_reminder"] = False
             iset.set(sett)
-            donate.grid(row=3, padx="0.2i", ipadx=5, sticky="wE", pady="0.1i")
+            donate.grid(row=3, padx="0.2i", ipadx="0.05i", sticky="wES", pady="0.1i", ipady="0.05i")
+
 
 
     donater = tk.IntVar()
@@ -885,7 +915,7 @@ def home():
 
     ad_button = ttk.Checkbutton(frame_1, text='Disable Donation Reminders', command=hide_donate,
                                   variable=donater)
-    ad_button.grid(row=5, padx=0, pady=10, ipadx=5, sticky="wNS")
+    ad_button.grid(row=5, padx=0, pady="0.1i", ipadx="0.05i", sticky="wNS")
 
     """
     autolaunch = tk.IntVar()
@@ -918,7 +948,7 @@ def home():
     donate = ttk.Button(boxRoot, text="Please Consider Donating 💖", style="Accent.TButton", command=donate) # old for bootstrapstyle="success.TButton"
 
     if show_donate:
-        donate.grid(row=3, padx="0.2i", ipadx=5, sticky="wE", pady="0.1i")
+        donate.grid(row=3, padx="0.2i", ipadx="0.05i", sticky="wES", pady="0.1i", ipady="0.05i")
 
     #frame_2.columnconfigure(1, weight=1)
     #frame_2.grid(row=2, column=0, padx=20, pady=20, sticky="NWE")#, columnspan=4)
@@ -926,24 +956,24 @@ def home():
 
     frame_3 = ttk.Frame(boxRoot)#, borderwidth=3, relief="ridge")
     cancel = ttk.Button(frame_3, text="Website", style="secondary.TButton", command=optic_web)
-    cancel.grid(row=0, column=0, sticky="we", padx=(0,5), ipadx=5, pady=("0.1i", 0))
+    cancel.grid(row=0, column=0, sticky="we", padx=(0,"0.05i"), ipadx="0.05i", pady=("0.1i", 0))
 
     manage_button = ttk.Button(frame_3, text="Configure", style="primary.Outline.TButton", command=config)
-    manage_button.grid(row=0, padx=5, ipadx=5, sticky="we", column=1, pady=("0.1i", 0))
+    manage_button.grid(row=0, padx="0.05i", ipadx="0.05i", sticky="we", column=1, pady=("0.1i", 0))
 
 
     manage_button = ttk.Button(frame_3, text="License", style="primary.Outline.TButton", command=license)
-    manage_button.grid(row=0, padx=5, ipadx=0, sticky="we", column=2, pady=("0.1i", 0))
+    manage_button.grid(row=0, padx="0.05i", ipadx=0, sticky="we", column=2, pady=("0.1i", 0))
 
     manage_button = ttk.Button(frame_3, text="Logs", style="primary.Outline.TButton", command=logs)
-    manage_button.grid(row=0, padx=5, ipadx=0, sticky="We", column=3, pady=("0.1i", 0))
+    manage_button.grid(row=0, padx="0.05i", ipadx=0, sticky="We", column=3, pady=("0.1i", 0))
 
 
 
     def helper():
         open_help("home")
     help = ttk.Button(frame_3, text="Help", command=helper)
-    help.grid(row=0, column=4, sticky="wE", padx=(5, 0), ipadx=5, pady=("0.1i", 0))
+    help.grid(row=0, column=4, sticky="wE", padx=("0.05i", 0), ipadx="0.05i", pady=("0.1i", 0))
 
 
 
@@ -960,7 +990,7 @@ def home():
     frame_3.rowconfigure(2, weight=3)
 
 
-    frame_3.grid(row=4, column=0, padx="0.2i", sticky="WESN", ipady="0.1i", pady=(0, "0.2i"))
+    frame_3.grid(row=4, column=0, padx="0.2i", sticky="WENS", ipady="0.1i", pady=(0, 0))
     #HWN = root.winfo_id()
     #titlebar.ChangeMenuBarColor(HWN)
     #boxRoot.overrideredirect(True)
@@ -970,17 +1000,17 @@ def home():
 
     #boxRoot.bind("<Return>", login)
 
-    boxRoot.rowconfigure(1, weight=1)
+    boxRoot.rowconfigure(1, weight=0)
 
     
     boxRoot.columnconfigure(0, weight=1)
 
     
-    boxRoot.rowconfigure(2, weight=1)
+    boxRoot.rowconfigure(2, weight=0)
 
-    boxRoot.rowconfigure(3, weight=0)
+    boxRoot.rowconfigure(3, weight=1)
 
-    boxRoot.rowconfigure(4, weight=1)
+    boxRoot.rowconfigure(4, weight=0)
 
 
 
@@ -1003,6 +1033,7 @@ def home():
 
     if rw > WIDTH or rh > HEIGHT:
         boxRoot.minsize(rw, rh)
+        boxRoot.geometry('+%d+%d' % (screensize[0] / 2 - rw / 2, screensize[1] / 2 - rh / 2 - ui.inch2pix(0.5)))
 
     boxRoot.deiconify()
 
@@ -1099,18 +1130,20 @@ def create(extension, test_file=False, comd=None, machine=None):
     imager = Image.open(asset_dir + "linkedit.png")
     # imager = imager.resize([48, 48])
 
-    img = PIL.ImageTk.PhotoImage(imager.resize([50, 50]))
+    img_size = ui.inch2pix(0.43)
+
+    img = PIL.ImageTk.PhotoImage(imager.resize([img_size, img_size]))
     labelm = tk.Label(frame_0, image=img)
     labelm.image = img
-    labelm.grid(row=0, column=0, padx=10, pady=10)
+    labelm.grid(row=0, column=0, padx="0.1i", pady="0.1i")
     frame_0.columnconfigure(1, weight=1)
 
-    frame_0.grid(row=0, column=0, padx=10, pady=0, sticky="NEW", rowspan=1)  # , columnspan=3)
+    frame_0.grid(row=0, column=0, padx="0.1i", pady=0, sticky="NEW", rowspan=1)  # , columnspan=3)
 
     frame_1 = ttk.Frame(boxRoot)  # , padding="0.15i")
 
     selector_label = ttk.Label(frame_1, text="WSL Distro:")
-    selector_label.grid(row=0, column=0, padx=10, pady=0, sticky="W", rowspan=1)
+    selector_label.grid(row=0, column=0, padx="0.1i", pady=0, sticky="W", rowspan=1)
 
     machines = os.popen("wsl.exe -l -q").read()
     machines = re.sub(r'[^a-zA-Z0-9_./\n-]', r'', machines).splitlines()
@@ -1132,7 +1165,7 @@ def create(extension, test_file=False, comd=None, machine=None):
         quitter()
         return None
 
-    machine_chooser.grid(row=0, column=1, padx=0, pady=20, sticky="WE", rowspan=1, columnspan=2)
+    machine_chooser.grid(row=0, column=1, padx=0, pady="0.2i", sticky="WE", rowspan=1, columnspan=2)
 
     if pre_machine != None:
         try:
@@ -1143,7 +1176,7 @@ def create(extension, test_file=False, comd=None, machine=None):
 
 
     cmd_label = ttk.Label(frame_1, text="Command:  ")
-    cmd_label.grid(row=1, column=0, padx=10, pady=0, sticky="WE", rowspan=1)
+    cmd_label.grid(row=1, column=0, padx="0.1i", pady=0, sticky="WE", rowspan=1)
 
     cmd = ttk.Entry(frame_1, width=20)
     cmd.focus_force()
@@ -1191,19 +1224,19 @@ def create(extension, test_file=False, comd=None, machine=None):
         except:
             logger.exception("cannot save edited assoc")
     chooser = ttk.Button(frame_1, text="App List", style="secondary.TButton", command=app_choose)
-    chooser.grid(row=1, column=2, padx=(15, 0), pady=0, sticky="ENS", rowspan=1, columnspan=1)
+    chooser.grid(row=1, column=2, padx=("0.15i", 0), pady=0, sticky="ENS", rowspan=1, columnspan=1)
     frame_1.rowconfigure(1, weight=2)
     boxRoot.update()
     leng = chooser.winfo_width() + cmd.winfo_width()
 
 
     cmd_label = ttk.Label(frame_1, text="* If using custom arguments, use the #fpth# variable in place of the file path.", wraplength="3i") #" * Variable #fpth# replaced with filename being opened."
-    cmd_label.grid(row=2, column=1, padx=10, pady=10, sticky="WE", columnspan=2)
+    cmd_label.grid(row=2, column=1, padx="0.1i", pady="0.1i", sticky="WE", columnspan=2)
 
     cmd_label = ttk.Label(frame_1,
                           text="Example: gedit --new-window #fpth#")  # " * Variable #fpth# replaced with filename being opened."
     cmd_label.configure(font=("Segoe UI Light", 10))
-    cmd_label.grid(row=3, column=1, padx=10, pady=0, sticky="WN", columnspan=2)
+    cmd_label.grid(row=3, column=1, padx="0.1i", pady=0, sticky="WN", columnspan=2)
     def manpage():
         nonlocal cmd
         try:
@@ -1213,10 +1246,10 @@ def create(extension, test_file=False, comd=None, machine=None):
         except:
             logger.exception("cannot launch manpage func")
     man = ttk.Button(frame_1, text="See Command Manpage", command=manpage, style="info.TButton")
-    man.grid(row=4, column=1, padx=0, ipadx=5, sticky="E", rowspan=1, columnspan=2, pady=("0.2i", 0))
+    man.grid(row=4, column=1, padx=0, ipadx="0.05i", sticky="E", rowspan=1, columnspan=2, pady=("0.2i", 0))
 
     frame_1.columnconfigure(1, weight=1)
-    frame_1.grid(row=1, column=0, padx=20, pady=10, sticky="NEW")  # , columnspan=3)
+    frame_1.grid(row=1, column=0, padx="0.2i", pady="0.1i", sticky="NEW")  # , columnspan=3)
 
     #frame_2.columnconfigure(1, weight=1)
     #frame_2.grid(row=2, column=0, padx=20, pady=20, sticky="NWE")#, columnspan=4)
@@ -1224,12 +1257,12 @@ def create(extension, test_file=False, comd=None, machine=None):
 
     frame_3 = ttk.Frame(boxRoot)#, borderwidth=3, relief="ridge")
     cancel = ttk.Button(frame_3, text="Cancel", style="warning.TButton", command=quitter)
-    cancel.grid(row=0, column=0, sticky="WE", padx=5, ipadx=5)
+    cancel.grid(row=0, column=0, sticky="WE", padx="0.05i", ipadx="0.05i")
 
     def helper():
         open_help("create")
     help = ttk.Button(frame_3, text="Help", command=helper)
-    help.grid(row=0, column=1, sticky="WE", padx=5, ipadx=5)
+    help.grid(row=0, column=1, sticky="WE", padx="0.05i", ipadx="0.05i")
 
     column = 2
     def tester():
@@ -1273,18 +1306,18 @@ def create(extension, test_file=False, comd=None, machine=None):
 
     test = ttk.Button(frame_3, text="Test Configuration", style="secondary.TButton", command=tester)
     if test_file != False:
-        test.grid(row=0, column=2, sticky="WE", padx=(0,5), ipadx=5)
+        test.grid(row=0, column=2, sticky="WE", padx=(0,"0.05i"), ipadx="0.05i")
         column += 1
         frame_3.columnconfigure(3, weight=1)
     apply = ttk.Button(frame_3, text="Save Configuration", style="success.TButton", command=saver)
-    apply.grid(row=0, column=column, sticky="WE", padx=(5,0), ipadx=5)
+    apply.grid(row=0, column=column, sticky="WE", padx=("0.05i",0), ipadx="0.05i")
 
     frame_3.columnconfigure(0, weight=1)
     frame_3.columnconfigure(1, weight=1)
     frame_3.columnconfigure(2, weight=1)
     frame_3.rowconfigure(0, weight=1)
 
-    frame_3.grid(row=3, column=0, padx=20, pady=20, sticky="SWEN")
+    frame_3.grid(row=3, column=0, padx="0.2i", pady="0.2i", sticky="SWEN")
     #HWN = root.winfo_id()
     #titlebar.ChangeMenuBarColor(HWN)
     #boxRoot.overrideredirect(True)
@@ -1436,17 +1469,18 @@ def applist(machine):
     # First the label
     frame_0 = ttk.Frame(boxRoot)
     explain = tk.Label(frame_0, text=f"Apps installed on {machine}.\nSelect an app to continue.", justify=LEFT)
-    explain.grid(row=0, column=1, padx=10, pady=20, sticky="NW", rowspan=1)#, columnspan=3)
+    explain.grid(row=0, column=1, padx="0.1i", pady="0.2i", sticky="NW", rowspan=1)#, columnspan=3)
     imager = Image.open(asset_dir + "applist2.png")
     # imager = imager.resize([48, 48])
 
-    img = PIL.ImageTk.PhotoImage(imager.resize([50, 50]))
+    img_size = ui.inch2pix(0.43)
+    img = PIL.ImageTk.PhotoImage(imager.resize([img_size, img_size]))
     labelm = tk.Label(frame_0, image=img)
     labelm.image = img
-    labelm.grid(row=0, column=0, padx=10, pady=10)
+    labelm.grid(row=0, column=0, padx="0.1i", pady="0.1i")
     frame_0.columnconfigure(1, weight=1)
 
-    frame_0.grid(row=0, column=0, padx=10, pady=0, sticky="NEW", rowspan=1)#, columnspan=3)
+    frame_0.grid(row=0, column=0, padx="0.1i", pady=0, sticky="NEW", rowspan=1)#, columnspan=3)
 
     frame_1 = ttk.Frame(boxRoot)#, borderwidth=2, relief="solid")#, pflatadding="0.15i")
 
@@ -1463,7 +1497,7 @@ def applist(machine):
     def onFrameConfigure(canvas):
         '''Reset the scroll region to encompass the inner frame'''
         canvas.configure(scrollregion=canvas.bbox("all"))
-        #list_frame.configure(width=canvas.winfo_width())
+
     list_frame.bind("<Configure>", lambda event, canvas=list_canvas: onFrameConfigure(list_canvas))
     list_frame.configure()
     list_frame.columnconfigure(0, weight=1)
@@ -1484,7 +1518,7 @@ def applist(machine):
     list_canvas.create_window((4, 4), window=list_frame, anchor="center")
 
 
-    scroller.grid(column=1, row=0, sticky="NES", padx=5, pady=5)
+    scroller.grid(column=1, row=0, sticky="NES", padx="0.05i", pady="0.05i")
 
     frame_1.columnconfigure(0, weight=1)
     frame_1.rowconfigure(0, weight=1)
@@ -1503,7 +1537,7 @@ def applist(machine):
 
 
 
-    frame_1.grid(row=1, column=0, padx=20, sticky="NEWS")#, columnspan=3)
+    frame_1.grid(row=1, column=0, padx="0.2i", sticky="NEWS")#, columnspan=3)
     #frame_1.grid_columnconfigure(2, weight=1)
 
 
@@ -1511,12 +1545,12 @@ def applist(machine):
 
     frame_3 = ttk.Frame(boxRoot)#, borderwidth=3, relief="ridge")
     cancel = ttk.Button(frame_3, text="Cancel", style="warning.TButton", command=quitter)
-    cancel.grid(row=0, column=0, sticky="W", padx=5)
+    cancel.grid(row=0, column=0, sticky="W", padx="0.05i")
 
     def helper():
         open_help("applist")
     help = ttk.Button(frame_3, text="Help", command=helper)
-    help.grid(row=0, column=1, sticky="E", padx=5)
+    help.grid(row=0, column=1, sticky="E", padx="0.05i")
 
     #test = ttk.Button(frame_3, text="Test Configuration", style="secondary.TButton")
     #test.grid(row=0, column=2, sticky="EW", padx=5)
@@ -1525,7 +1559,7 @@ def applist(machine):
     #apply.grid(row=0, column=3, sticky="E", padx=5)
 
     frame_3.columnconfigure(2, weight=1)
-    frame_3.grid(row=2, column=0, padx=20, pady=20, sticky="SWE")
+    frame_3.grid(row=2, column=0, padx="0.2i", pady="0.2i", sticky="SWE")
     #HWN = root.winfo_id()
     #titlebar.ChangeMenuBarColor(HWN)
     #boxRoot.overrideredirect(True)
@@ -1539,6 +1573,11 @@ def applist(machine):
     boxRoot.deiconify()
     #boxRoot.wm_attributes("-topmost", 1)
     done = False
+
+    #ico_size = round(ui.inch2pix(0.5) / 48) * 48
+
+    ico_size = round(ui.inch2pix(0.5) / 24) * 24
+
 
     old = sv_ttk.get_theme()
     while True:
@@ -1556,26 +1595,28 @@ def applist(machine):
         # draw(canvas, mouse=False)
         #time.sleep(0.05)
         boxRoot.update()
+
+
         if loading == False and done == False:
             load_msg.destroy()
             for app_num in range(len(app_list)):
                 app = app_list[app_num]
                 app_frame = ttk.Frame(list_frame)
                 imag = Image.open(app_dict[app]["icon"])
-                img = PIL.ImageTk.PhotoImage(imag.resize([48, 48]))
+                img = PIL.ImageTk.PhotoImage(imag.resize([ico_size, ico_size]))
                 icon_label = tk.Label(app_frame, image=img)
                 icon_label.image = img
-                icon_label.grid(row=0, column=0, sticky="WNE", padx=10, pady=10)
+                icon_label.grid(row=0, column=0, sticky="WNE", padx="0.1i", pady="0.1i")
 
 
                 app_name = ttk.Label(app_frame, text=app[0].upper() + app[1:])
-                app_name.grid(row=0, column=1, padx=5, pady=10, sticky="we")
+                app_name.grid(row=0, column=1, padx="0.05i", pady="0.1i", sticky="we")
 
                 app_button = ttk.Button(app_frame, text="Select", style="success.TButton", command=lambda j=app: select_app(j))
-                app_button.grid(row=0, column=2, padx=10, pady=10, sticky="E")
+                app_button.grid(row=0, column=2, padx="0.1i", pady="0.1i", sticky="E")
                 app_frame.columnconfigure(1, weight=1)
 
-                app_frame.grid(row=app_num, sticky="NWE")
+                app_frame.grid(row=app_num, sticky="NWE", ipady="0.05i")
 
             done = True
             boxRoot.update()
@@ -1723,17 +1764,19 @@ def manage_assoc(parent=None):
     # First the label
     frame_0 = ttk.Frame(boxRoot)
     explain = tk.Label(frame_0, text=f"Open In WSL Associations.\nCreate, Edit, and Delete Associations.", justify=LEFT)
-    explain.grid(row=0, column=1, padx=10, pady=20, sticky="NW", rowspan=1)#, columnspan=3)
+    explain.grid(row=0, column=1, padx="0.1i", pady="0.2i", sticky="NW", rowspan=1)#, columnspan=3)
     imager = Image.open(asset_dir + "manageassoc.png")
     # imager = imager.resize([48, 48])
 
-    img = PIL.ImageTk.PhotoImage(imager.resize([50, 50]))
+    img_size = ui.inch2pix(0.43)
+
+    img = PIL.ImageTk.PhotoImage(imager.resize([img_size, img_size]))
     labelm = tk.Label(frame_0, image=img)
     labelm.image = img
-    labelm.grid(row=0, column=0, padx=10, pady=10)
+    labelm.grid(row=0, column=0, padx="0.1i", pady="0.1i")
     frame_0.columnconfigure(1, weight=1)
 
-    frame_0.grid(row=0, column=0, padx=10, pady=0, sticky="NEW", rowspan=1)#, columnspan=3)
+    frame_0.grid(row=0, column=0, padx="0.1i", pady=0, sticky="NEW", rowspan=1)#, columnspan=3)
 
     frame_1 = ttk.Frame(boxRoot)#, borderwidth=2, relief="solid")#, pflatadding="0.15i")
 
@@ -1771,7 +1814,7 @@ def manage_assoc(parent=None):
     list_canvas.create_window((4, 4), window=list_frame, anchor="center")
 
 
-    scroller.grid(column=1, row=0, sticky="NES", padx=5, pady=5)
+    scroller.grid(column=1, row=0, sticky="NES", padx="0.05i", pady="0.05i")
 
     frame_1.columnconfigure(0, weight=1)
     frame_1.rowconfigure(0, weight=1)
@@ -1798,21 +1841,21 @@ def manage_assoc(parent=None):
 
     frame_3 = ttk.Frame(boxRoot)#, borderwidth=3, relief="ridge")
     cancel = ttk.Button(frame_3, text="Close", style="secondary.TButton", command=quitter)
-    cancel.grid(row=0, column=0, sticky="W", padx=5)
+    cancel.grid(row=0, column=0, sticky="W", padx="0.05i")
 
     def helper():
         open_help("manage")
     help = ttk.Button(frame_3, text="Help", command=helper)
-    help.grid(row=0, column=1, sticky="E", padx=5)
+    help.grid(row=0, column=1, sticky="E", padx="0.05i")
 
     test = ttk.Button(frame_3, text="Add Association", style="success.TButton", command=add_app)
-    test.grid(row=0, column=3, sticky="E", padx=5, ipadx=5)
+    test.grid(row=0, column=3, sticky="E", padx="0.05i", ipadx="0.05i")
 
     #apply = ttk.Button(frame_3, text="Save Configuration", style="success.TButton")
     #apply.grid(row=0, column=3, sticky="E", padx=5)
 
     frame_3.columnconfigure(2, weight=1)
-    frame_3.grid(row=2, column=0, padx=20, pady=20, sticky="SWE")
+    frame_3.grid(row=2, column=0, padx="0.2i", pady="0.2i", sticky="SWE")
     #HWN = root.winfo_id()
     #titlebar.ChangeMenuBarColor(HWN)
     #boxRoot.overrideredirect(True)
@@ -1860,20 +1903,20 @@ def manage_assoc(parent=None):
 
                 icon_label = tk.Label(app_frame, text=app, width=5)
                 icon_label.configure(font=font)
-                icon_label.grid(row=0, column=0, sticky="WNE", padx=10, pady=10, ipadx=0, ipady=10)
+                icon_label.grid(row=0, column=0, sticky="WNE", padx="0.1i", pady="0.1i", ipadx=0, ipady="0.1i")
 
                 attrib = associations[app]
                 com = attrib['command'].replace('#fpth#', '"file"')
                 app_name = ttk.Label(app_frame, text=f"Distro: {attrib['distro']}\n\nApp: {com[0].upper() + com[1:]}")
-                app_name.grid(row=0, column=1, padx=5, pady=10, sticky="weNS")
+                app_name.grid(row=0, column=1, padx="0.05i", pady="0.1i", sticky="weNS")
 
                 app_button = ttk.Button(app_frame, text="Edit", style="success.TButton", command=lambda j=app: select_app(j))
-                app_button.grid(row=0, column=2, padx=5, pady=10, sticky="E")
+                app_button.grid(row=0, column=2, padx="0.05i", pady="0.1i", sticky="E")
 
 
                 del_button = ttk.Button(app_frame, text="Delete", style="danger.TButton",
                                         command=lambda j=app: delete_app(j))
-                del_button.grid(row=0, column=3, padx=5, pady=10, sticky="E")
+                del_button.grid(row=0, column=3, padx="0.05i", pady="0.1i", sticky="E")
 
                 app_frame.columnconfigure(1, weight=1)
                 separator = ttk.Separator(app_frame, orient=tk.HORIZONTAL)
@@ -1881,7 +1924,7 @@ def manage_assoc(parent=None):
                 if assoc_num != len(assoc_list) - 1:
                     separator.grid(row=1, columnspan=4, sticky="we")
 
-                app_frame.grid(row=assoc_num + 1, sticky="NWE", pady=5, ipadx=5)
+                app_frame.grid(row=assoc_num + 1, sticky="NWE", pady="0.05i", ipadx="0.05i")
 
             done = True
             boxRoot.update()
